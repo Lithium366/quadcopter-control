@@ -1,1 +1,16 @@
 /* Main CSS */
+#container-throttle {
+    width: 80px;
+    height: 70px;
+}
+
+.rcControls {
+    float: left;
+    width: 320px;
+}
+
+h3 {
+    font: 12px "Tahoma";
+    text-align: center;
+    margin: 0;
+}
