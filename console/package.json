@@ -1,0 +1,15 @@
+{
+  "name": "quadcopter_console",
+  "version": "0.0.0",
+  "description": "this is a console to control my arduino-based quadcopter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lithium366/quadcopter-control/console"
+  },
+  "author": "Ilya Sevrugin",
+  "license": "ISC"
+}
