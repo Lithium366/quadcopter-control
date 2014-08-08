@@ -11,5 +11,9 @@
     "url": "https://github.com/Lithium366/quadcopter-control/console"
   },
   "author": "Ilya Sevrugin",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "serialport": "^1.4.5",
+    "express": "^4.8.2"
+  }
 }
