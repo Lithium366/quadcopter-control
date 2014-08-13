@@ -12,7 +12,7 @@ block content
 			h3 Status
 			#container-serial
 				.title Serial data
-				.statusLight.red				
+				.statusLight.red
 			#container-gps
 				.title GPS data
 				.statusLight.orange
@@ -20,35 +20,19 @@ block content
 				.title Arm/Disarm
 				.statusLight.green
 		.settings
-			h3 PID settings
-				form
-					.row 
-						h4 Pitch PID
-						label(for='pidxp') P
-						input(name='pidxp', id='pidxp', value='0.000')
-						label(for='pidxi') I
-						input(name='pidxi', id='pidxi', value='0.000')
-						label(for='pidxd') D
-						input(name='pidxd', id='pidxd', value='0.000')
-					.row 
-						h4 Roll PID
-						label(for='pidyp') P
-						input(name='pidyp', id='pidyp', value='0.000')
-						label(for='pidyi') I
-						input(name='pidyi', id='pidyi', value='0.000')
-						label(for='pidyd') D
-						input(name='pidyd', id='pidyd', value='0.000')
-					.row 
-						h4 Yaw PID
-						label(for='pidyp') P
-						input(name='pidyp', id='pidyp', value='0.000')
-						label(for='pidyi') I
-						input(name='pidyi', id='pidyi', value='0.000')
-						label(for='pidyd') D
-						input(name='pidyd', id='pidyd', value='0.000')
+			h3(ng-app='pidApp') PID settings
+				form(ng-controller='PidList')
+					.row(ng-repeat='(axe, pid) in pids')
+						h4 {{pid.name}} PID
+						label(for='pid{{axe}}p') P
+						input(name='pid{{axe}}p', id='pid{{axe}}p', value='{{pid.p}}')
+						label(for='pid{{axe}}i') I
+						input(name='pid{{axe}}i', id='pid{{axe}}i', value='{{pid.i}}')
+						label(for='pid{{axe}}d') D
+						input(name='pidx{{axe}}d', id='pid{{axe}}d', value='{{pid.d}}')
 					.row
 						input(type='button', id='savePid', value='Save')
-						input(type='button', id='resetPid', value='Reset')				
+						input(type='button', id='resetPid', value='Reset')
 	.rightPanel
 		.gauges
 			#container-speed
