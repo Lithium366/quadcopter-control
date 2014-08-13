@@ -1,12 +1,62 @@
 extends layout
 
 block content
-	.rcControls
-		h3 RC signals
-		#container-throttle
-		#container-yaw
-		#container-pitch
-		#container-roll
-		#container-aux1
-		#container-aux2
-		#container-gear
+	.leftPanel
+		.rcControls
+			h3 RC signals
+			#container-throttle
+			#container-yaw
+			#container-pitch
+			#container-roll
+		.status.clearfix
+			h3 Status
+			#container-serial
+				.title Serial data
+				.statusLight.red				
+			#container-gps
+				.title GPS data
+				.statusLight.orange
+			#container-arm
+				.title Arm/Disarm
+				.statusLight.green
+		.settings
+			h3 PID settings
+				form
+					.row 
+						h4 Pitch PID
+						label(for='pidxp') P
+						input(name='pidxp', id='pidxp', value='0.000')
+						label(for='pidxi') I
+						input(name='pidxi', id='pidxi', value='0.000')
+						label(for='pidxd') D
+						input(name='pidxd', id='pidxd', value='0.000')
+					.row 
+						h4 Roll PID
+						label(for='pidyp') P
+						input(name='pidyp', id='pidyp', value='0.000')
+						label(for='pidyi') I
+						input(name='pidyi', id='pidyi', value='0.000')
+						label(for='pidyd') D
+						input(name='pidyd', id='pidyd', value='0.000')
+					.row 
+						h4 Yaw PID
+						label(for='pidyp') P
+						input(name='pidyp', id='pidyp', value='0.000')
+						label(for='pidyi') I
+						input(name='pidyi', id='pidyi', value='0.000')
+						label(for='pidyd') D
+						input(name='pidyd', id='pidyd', value='0.000')
+					.row
+						input(type='button', id='savePid', value='Save')
+						input(type='button', id='resetPid', value='Reset')				
+	.rightPanel
+		.gauges
+			#container-speed
+			#container-vspeed
+			#container-altimeter
+			#container-heading
+			#container-facing
+		.map
+			#container-gmap
+
+

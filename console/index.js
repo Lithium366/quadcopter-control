@@ -19,7 +19,7 @@ server.listen(3000, function() {
 });
 
 setTimeout(function () {
-    io.emit('dataUpdated', "receiver:50:-20:50:0");
+    io.emit('dataUpdated', "receiver:50:-20:21:10");
 }, 5000);
 
 /*var SerialPort = require("serialport").SerialPort;
