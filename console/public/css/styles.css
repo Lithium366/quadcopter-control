@@ -1,7 +1,11 @@
 /* Main CSS */
-#container-throttle {
+#container-throttle,
+#container-yaw,
+#container-pitch,
+#container-roll {
     width: 80px;
     height: 70px;
+    float: left;
 }
 
 .rcControls {
