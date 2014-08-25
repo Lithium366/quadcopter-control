@@ -10,9 +10,9 @@
 #define CH8_IN_PIN A15
 
 //ESC connected to
-#define ENGINE1 12
-#define ENGINE2 6
-#define ENGINE3 4
+#define ENGINE1 4
+#define ENGINE2 2
+#define ENGINE3 3
 #define ENGINE4 5
 
 // Values range from RC reciever
@@ -27,17 +27,20 @@ int minThrottle = 300;
 int maxThrottle = 2300;
 
 // Correction values to keep horison position
-int pitchCorrection = 0;
-int rollCorrection = 0;
+int pitchCorrection = -7.2;
+int rollCorrection = -2.4;
 
-float pidXP = 0;
-float pidXI = 0;
-float pidXD = 0;
+//Roll
+float pidXP = 0.9;
+float pidXI = 3.3;
+float pidXD = 0.365;
 
-float pidYP = 0;
-float pidYI = 0;
-float pidYD = 0;
+//Pitch
+float pidYP = 0; //1.8;
+float pidYI = 0; //0.08;
+float pidYD = 0; //0.45;
 
+//Yaw
 float pidZP = 0;
 float pidZI = 0;
 float pidZD = 0;

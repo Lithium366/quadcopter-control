@@ -18,14 +18,12 @@ server.listen(3000, function() {
     console.log('Listening on port %d', server.address().port);
 });
 
-setTimeout(function () {
-    io.emit('dataUpdated', "receiver:50:-20:50:0");
-}, 5000);
-
-/*var SerialPort = require("serialport").SerialPort;
-var serialport = new SerialPort("COM6");
+var SerialPort = require("serialport").SerialPort;
+var serialport = new SerialPort("COM6", {
+	baudrate: 57600
+});
 serialport.on('open', function(){
-    serialport.on('data', function(data){        
-        io.emit('dataUpdated', data[0]);
+    serialport.on('data', function(data){
+        io.emit('dataUpdated', data.toString());
     });
-});*/
+});
