@@ -9,30 +9,31 @@ $(function () {
     $(window).on("dataUpdated", function (e, val) {
         var separated = val.split(":");
         if (separated[0] === 'reciever') {
-		console.log(separated);
             updateRCcontrols(separated.splice(1, separated.length));
-        }
+        } else if (separated[0] === "pid") {
+	    $(window).trigger("pidUpdated", {values : separated.splice(1, separated.length)});
+	}
     });
 
     var updateRCcontrols = function (values) {
 		var chart = $('#container-throttle').highcharts();
-		if (chart) {
+		if (chart && values[0]) {
 			chart.series[0].points[0].update(parseInt(values[0]));
 		}
 
     	chart = $('#container-yaw').highcharts();
-		if (chart) {
-			chart.series[0].points[0].update(parseInt(values[1]))
+		if (chart && values[3]) {
+			chart.series[0].points[0].update(parseInt(values[3]))
 		}
     		
     	chart = $('#container-pitch').highcharts();
-		if (chart) {
-			chart.series[0].points[0].update(parseInt(values[2]));
+		if (chart && values[1]) {
+			chart.series[0].points[0].update(parseInt(values[1]));
 		}
 
     	chart = $('#container-roll').highcharts();
-		if (chart) {
-			chart.series[0].points[0].update(parseInt(values[3]));
+		if (chart && values[2]) {
+			chart.series[0].points[0].update(parseInt(values[2]));
 		}
     }
 

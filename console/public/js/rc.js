@@ -52,23 +52,23 @@ $(function () {
     $('#container-throttle').highcharts(Highcharts.merge(gaugeOptions, {
         yAxis: {
 	   plotBands: [{
-	         from: 40,
-	         to: 75,
+	         from: 314,
+	         to: 1500,
 	         color: 'green',
 	         thickness: 8
 	     }, {
-	         from: 75,
-	         to: 90,
+	         from: 1500,
+	         to: 2000,
 	         color: 'orange',
 	         thickness:8
 	     }, {
-	         from: 90,
-	         to: 100,
+	         from: 2000,
+	         to: 2400,
 	         color: 'red',
 	         thickness:8
 	     }],
-            min: 0,
-            max: 100,
+            min: 314,
+            max: 2400,
             title: {
                 text: 'Throttle',
                 style: {"font-size": "10px"}
@@ -81,7 +81,8 @@ $(function () {
 
         series: [{
             name: 'Throttle',
-            data: [0]
+            data: [0],
+	    animation: false
         }]
 
     }));
@@ -124,7 +125,8 @@ $(function () {
 
         series: [{
             name: 'Yaw',
-            data: [0]
+            data: [0],
+	    animation: false
         }]
 
     }));
@@ -167,7 +169,8 @@ $(function () {
 
         series: [{
             name: 'Pitch',
-            data: [0]
+            data: [0],
+	    animation: false
         }]
 
     }));
@@ -210,7 +213,8 @@ $(function () {
 
         series: [{
             name: 'Roll',
-            data: [0]
+            data: [0],
+	    animation: false
         }]
 
     }));

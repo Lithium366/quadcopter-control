@@ -26,5 +26,6 @@ var serialport = new SerialPort("COM6", {
 serialport.on('open', function(){
     serialport.on('data', function(data){
         io.emit('dataUpdated', data.toString());
+	console.log(data.toString());
     });
 });
