@@ -1,4 +1,5 @@
 #include <EEPROM.h>
+#include <Firmata.h>
 #include <Servo.h>
 #include <PinChangeInt.h>
 #include <Wire.h>
@@ -11,32 +12,34 @@
 int ThrottleVal, PitchVal, RollVal, YawVal, CH6Val, CH7Val, CH8Val;
 boolean CH5Val;
 
-ADXL345 acc;
-L3G4200D gyro;
-HMC5883L compass;
+ADXL345 acc; //Accelerometer data
+L3G4200D gyro; //Gyro data
+HMC5883L compass; //Compass data
 
-double anglex = 0;
-double angley = 0;
-double anglez = 0;
-int dtime = 0;
-int looptime = 0;
+double anglex = 0; //Roll
+double angley = 0; //Pitch
+double anglez = 0; //Yaw
+int dtime = 0; //Loop time
+int loopcount = 0; //For
 
-Servo enginex1;
-Servo enginex2;
-Servo enginex3;
-Servo enginex4;
+Servo enginex1; //Top left
+Servo enginex2; //Top right
+Servo enginex3; //Bottom left
+Servo enginex4; //Bottom right
 
-double SetpointX, OutputX, SetpointY, OutputY;
-//PID myPIDx(&anglex, &OutputX, &SetpointX,1.4, 0.05, 0.4, REVERSE);
-//PID myPIDy(&angley, &OutputY, &SetpointY,1.4, 0.05, 0.4, DIRECT);
-//Roll
+double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ;
+//Roll PID
 PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, DIRECT);
-//Pitch
+//Pitch PID
 PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, REVERSE);
+//Yaw PID
+PID myPIDz(&anglez, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, REVERSE);
 
 void setup() {
   Serial1.begin(57600);
   Serial.begin(57600);
+  /*Firmata.setFirmwareVersion(0, 1);
+  Firmata.begin(Serial1);*/
   acc.begin();
   gyro.enableDefault();
   compass = HMC5883L();
@@ -48,6 +51,8 @@ void setup() {
   myPIDx.SetOutputLimits(-100, 100);
   myPIDy.SetMode(AUTOMATIC);
   myPIDy.SetOutputLimits(-100, 100);
+  myPIDz.SetMode(AUTOMATIC);
+  myPIDz.SetOutputLimits(-100, 100);
   enginex1.attach(ENGINE1);
   enginex1.writeMicroseconds(0);
   enginex2.attach(ENGINE2);
@@ -62,41 +67,43 @@ void setup() {
 void loop() {
   readRC();
   getAngles();
- 
-  SetpointX = RollVal;
-  SetpointY = PitchVal;
+  /*while(Firmata.available()) {
+    Firmata.processInput();
+  }*/
 
   if (ThrottleVal > 400) {
+    SetpointX = RollVal;
+    SetpointY = PitchVal;
+    if (!SetpointZ) {
+      SetpointZ = anglez;
+    }
+    SetpointZ = SetpointZ + YawVal;
     myPIDx.Compute(); 
     myPIDy.Compute();
-    enginex1.writeMicroseconds(ThrottleVal - OutputY - OutputX - YawVal);
-    enginex2.writeMicroseconds(ThrottleVal - OutputY + OutputX + YawVal);
-    enginex3.writeMicroseconds(ThrottleVal + OutputY - OutputX + YawVal);
-    enginex4.writeMicroseconds(ThrottleVal + OutputY + OutputX - YawVal);
+    myPIDz.Compute();
+    enginex1.writeMicroseconds(ThrottleVal - OutputY - OutputX - OutputZ);
+    enginex2.writeMicroseconds(ThrottleVal - OutputY + OutputX + OutputZ);
+    enginex3.writeMicroseconds(ThrottleVal + OutputY - OutputX + OutputZ);
+    enginex4.writeMicroseconds(ThrottleVal + OutputY + OutputX - OutputZ);
   } else {
     enginex1.writeMicroseconds(0);
     enginex2.writeMicroseconds(0);
     enginex3.writeMicroseconds(0);
     enginex4.writeMicroseconds(0);
   }
-  
-  char debug_rc_values[50];
-  char debug_angles_values[20];
-  char debug_pid_values[50];
-  char debug_system_values[10];
-  char debug_final[130];
-   
-  looptime++;    
-  if (looptime == 1) {
+
+  //Debug info
+  /*loopcount++;
+  if (loopcount == 1) {
     printRC();
-  } else if (looptime == 2) {
+  } else if (loopcount == 2) {
     printAngles();
-  } else if (looptime == 3) {
+  } else if (loopcount == 3) {
     printPID();
-  } else if (looptime == 4) {
+  } else if (loopcount == 4) {
     printSystem(); 
-    looptime = 0;
-  }
+    loopcount = 0;
+  }*/
    
 }
 

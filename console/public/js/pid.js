@@ -21,7 +21,7 @@ pid.controller('PidList', function ($scope) {
       i : "0.000",
       d : "0.000"
     }
-  }
+  };
 
   $(window).on("pidUpdated", function (e, values) {
     values = values.values;

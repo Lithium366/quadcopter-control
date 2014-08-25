@@ -11,8 +11,8 @@ $(function () {
         if (separated[0] === 'reciever') {
             updateRCcontrols(separated.splice(1, separated.length));
         } else if (separated[0] === "pid") {
-	    $(window).trigger("pidUpdated", {values : separated.splice(1, separated.length)});
-	}
+	        $(window).trigger("pidUpdated", {values : separated.splice(1, separated.length)});
+	    }
     });
 
     var updateRCcontrols = function (values) {
