@@ -4,15 +4,26 @@ socket.on('dataUpdated', function(msg){
     $(window).trigger("dataUpdated", msg);
 });
 
+var buffer =  "";
+
 $(function () {
 
     $(window).on("dataUpdated", function (e, val) {
-        var separated = val.split(":");
-        if (separated[0] === 'reciever') {
-            updateRCcontrols(separated.splice(1, separated.length));
-        } else if (separated[0] === "pid") {
-	        $(window).trigger("pidUpdated", {values : separated.splice(1, separated.length)});
-	    }
+        buffer += val;
+        if (buffer.length > 500) {
+          buffer = buffer.substr(buffer.length - 500, buffer.length - 500);
+        }
+        var sections = buffer.match("|1001100|(.*)|1001100|");
+        if (!sections) return false;
+        var separatedSections = sections[sections.length - 1].split("|");
+        for (var i = 0; i < separatedSections.length; i++) {
+          var fields = separatedSections[i].split(":");
+          if (fields[0] === 'reciever') {
+            updateRCcontrols(fields.splice(1, fields.length));
+          } else if (fields[0] === "pid") {
+            $(window).trigger("pidUpdated", {values: fields.splice(1, fields.length)});
+          }
+        }
     });
 
     var updateRCcontrols = function (values) {
