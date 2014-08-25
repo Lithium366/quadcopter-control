@@ -8,7 +8,8 @@ $(function () {
 
     $(window).on("dataUpdated", function (e, val) {
         var separated = val.split(":");
-        if (separated[0] === 'receiver') {
+        if (separated[0] === 'reciever') {
+		console.log(separated);
             updateRCcontrols(separated.splice(1, separated.length));
         }
     });

@@ -87,7 +87,7 @@ void loop() {
   char debug_final[130];
    
   looptime++;    
-  if (looptime >= 10) {
+  if (looptime >= 50) {
     printRC();
     printAngles();
     printPID();
@@ -104,11 +104,13 @@ void printPID () {
     Serial1.print(pidXI);
     Serial1.print(":");
     Serial1.print(pidXD);
+    Serial1.print(":");
     Serial1.print(pidYP);
     Serial1.print(":");
     Serial1.print(pidYI);
     Serial1.print(":");
     Serial1.print(pidYD);
+    Serial1.print(":");
     Serial1.print(pidZP);
     Serial1.print(":");
     Serial1.print(pidZI);
