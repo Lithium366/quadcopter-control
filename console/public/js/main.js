@@ -18,6 +18,21 @@ $(function () {
 		if (chart) {
 			chart.series[0].points[0].update(parseInt(values[0]));
 		}
+
+    	chart = $('#container-yaw').highcharts();
+		if (chart) {
+			chart.series[0].points[0].update(parseInt(values[1]))
+		}
+    		
+    	chart = $('#container-pitch').highcharts();
+		if (chart) {
+			chart.series[0].points[0].update(parseInt(values[2]));
+		}
+
+    	chart = $('#container-roll').highcharts();
+		if (chart) {
+			chart.series[0].points[0].update(parseInt(values[3]));
+		}
     }
 
 });

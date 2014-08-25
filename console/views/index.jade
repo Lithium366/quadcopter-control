@@ -1,7 +1,46 @@
 extends layout
 
 block content
-	.rcControls
-		h3 RC signals
-		#container-throttle
+	.leftPanel
+		.rcControls
+			h3 RC signals
+			#container-throttle
+			#container-yaw
+			#container-pitch
+			#container-roll
+		.status.clearfix
+			h3 Status
+			#container-serial
+				.title Serial data
+				.statusLight.red
+			#container-gps
+				.title GPS data
+				.statusLight.orange
+			#container-arm
+				.title Arm/Disarm
+				.statusLight.green
+		.settings
+			h3(ng-app='pidApp') PID settings
+				form(ng-controller='PidList')
+					.row(ng-repeat='(axe, pid) in pids')
+						h4 {{pid.name}} PID
+						label(for='pid{{axe}}p') P
+						input(name='pid{{axe}}p', id='pid{{axe}}p', value='{{pid.p}}')
+						label(for='pid{{axe}}i') I
+						input(name='pid{{axe}}i', id='pid{{axe}}i', value='{{pid.i}}')
+						label(for='pid{{axe}}d') D
+						input(name='pidx{{axe}}d', id='pid{{axe}}d', value='{{pid.d}}')
+					.row
+						input(type='button', id='savePid', value='Save')
+						input(type='button', id='resetPid', value='Reset')
+	.rightPanel
+		.gauges
+			#container-speed
+			#container-vspeed
+			#container-altimeter
+			#container-heading
+			#container-facing
+		.map
+			#container-gmap
+
 

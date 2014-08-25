@@ -22,6 +22,7 @@ var SerialPort = require("serialport").SerialPort;
 var serialport = new SerialPort("COM6", {
 	baudrate: 57600
 });
+
 serialport.on('open', function(){
     serialport.on('data', function(data){
         io.emit('dataUpdated', data.toString());

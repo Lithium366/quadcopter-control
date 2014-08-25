@@ -1,16 +1,105 @@
 /* Main CSS */
-#container-throttle {
-    width: 80px;
-    height: 70px;
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+ 
+.clearfix {
+    display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+    display: block;
+}
+ 
+* html .clearfix {
+    height: 1%;
 }
 
-.rcControls {
+html {
+	font: 12px "Tahoma";
+}
+
+#container-throttle,
+#container-yaw,
+#container-pitch,
+#container-roll {
+    width: 80px;
+    height: 70px;
     float: left;
-    width: 320px;
+}
+
+.leftPanel,
+.rightPanel {
+	float:left;
+}
+
+.rightPanel {
+	
+}
+
+.row {
+	max-width: 320px;
+	text-align: left;
+}
+
+.row h4 {
+	font-weight: normal;
+	text-align: left;	
+	margin: 5px 0;
+}
+
+.row input {
+	width: 80px;
+	margin-right: 10px;
+}
+
+.row label {
+	margin: 0 10px 0 0;
+	font-weight: normal;
+}
+
+.row #savePid,
+.row #resetPid {
+	margin: 20px 10px 0 15px;
+}
+
+.status {	
+	width: 320px;
+}
+
+.status .statusLight {
+	width:10px;
+	height:10px;
+	border-radius: 3px;
+	display: inline-block;
+}
+
+.status .statusLight.red {
+	background-color: red;
+}
+
+.status .statusLight.orange {
+	background-color: orange;
+}
+
+.status .statusLight.green {
+	background-color: green;
+}
+
+.status .title {
+	display: inline-block;
+	width: 100px;
+	line-height: 20px;
 }
 
 h3 {
     font: 12px "Tahoma";
     text-align: center;
-    margin: 0;
+    margin: 10px 0;
+    font-weight: bold;    
 }
