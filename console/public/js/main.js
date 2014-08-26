@@ -11,10 +11,10 @@ $(function () {
     $(window).on("dataUpdated", function (e, val) {
         buffer += val;
         if (buffer.length > 500) {
-          buffer = buffer.substr(buffer.length - 500, buffer.length - 500);
+          buffer = buffer.substr(buffer.length - 500, 500);
         }
-        var sections = buffer.match("|1001100|(.*)|1001100|");
-        if (!sections) return false;
+        var sections = buffer.match(/\|1001100\|(.*)\|1001100\|/);
+        if (!sections || !sections[sections.length - 1]) return false;
         var separatedSections = sections[sections.length - 1].split("|");
         for (var i = 0; i < separatedSections.length; i++) {
           var fields = separatedSections[i].split(":");

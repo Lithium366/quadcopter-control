@@ -22,24 +22,24 @@ int rcMax = 1860;
 // Max angles for X/Y/Z axes, throttle
 int maxPitch = 30;
 int maxRoll = 30;
-int maxYaw = 50;
+int maxYaw = 30;
 int minThrottle = 300;
 int maxThrottle = 2300;
 
 // Correction values to keep horison position
-float pitchCorrection = -7.2;
-float rollCorrection = -2.4;
+int pitchCorrection = -7.2;
+int rollCorrection = -2.4;
 float yawCorrection = 0;
 
 //Roll
-float pidXP = 0.8;
-float pidXI = 0.7;
-float pidXD = 0.35;
+float pidXP = 1.6;//0.9;
+float pidXI = 0.7;//0.2;
+float pidXD = 0.6;//0.85;
 
 //Pitch
-float pidYP = 0.8;
-float pidYI = 0.7;
-float pidYD = 0.35;
+float pidYP = 0;//0.9;
+float pidYI = 0.001;//0.2;
+float pidYD = 0;//0.85;
 
 //Yaw
 float pidZP = 0;

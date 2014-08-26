@@ -48,10 +48,13 @@ void setup() {
   SetpointX = 0;
   SetpointY = 0;
   myPIDx.SetMode(AUTOMATIC);
+  myPIDx.SetSampleTime(6);
   myPIDx.SetOutputLimits(-100, 100);
   myPIDy.SetMode(AUTOMATIC);
+  myPIDy.SetSampleTime(6);
   myPIDy.SetOutputLimits(-100, 100);
   myPIDz.SetMode(AUTOMATIC);
+  myPIDz.SetSampleTime(6);
   myPIDz.SetOutputLimits(-100, 100);
   enginex1.attach(ENGINE1);
   enginex1.writeMicroseconds(0);
@@ -77,7 +80,6 @@ void loop() {
     if (!SetpointZ) {
       SetpointZ = anglez;
     }
-    SetpointZ = SetpointZ + YawVal;
     myPIDx.Compute(); 
     myPIDy.Compute();
     myPIDz.Compute();
@@ -93,18 +95,18 @@ void loop() {
   }
 
   //Debug info
-  loopcount++;
+  /*loopcount++;
   if (loopcount == 1) {
     Serial1.print("1001100|");
     printRC();
-  } else if (loopcount == 2) {
+  } else if (loopcount == 50) {
     printAngles();
-  } else if (loopcount == 3) {
+  } else if (loopcount == 100) {
     printPID();
-  } else if (loopcount == 4) {
+  } else if (loopcount == 150) {
     printSystem(); 
     loopcount = 0;
-  }
+  }*/
    
 }
 
@@ -128,7 +130,7 @@ void printPID () {
     dtostrf(pidZP, 3, 1, pidZP_s);
     dtostrf(pidZI, 3, 1, pidZI_s);
     dtostrf(pidZD, 3, 1, pidZD_s);
-    sprintf(total, "pid:%s:%s:%s:%s:%s:%s:%s:%s:%s|", pidXP, pidXI, pidXD, pidYP, pidYI, pidYD, pidZP, pidZI, pidZD);
+    sprintf(total, "pid:%s:%s:%s:%s:%s:%s:%s:%s:%s|", pidXP_s, pidXI_s, pidXD_s, pidYP_s, pidYI_s, pidYD_s, pidZP_s, pidZI_s, pidZD_s);
     Serial1.print(total);
 }
 
