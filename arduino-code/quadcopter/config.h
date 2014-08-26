@@ -32,14 +32,14 @@ int rollCorrection = -2.4;
 float yawCorrection = 0;
 
 //Roll
-float pidXP = 1.6;//0.9;
-float pidXI = 0.7;//0.2;
+float pidXP = 1.4;//0.9;
+float pidXI = 0.5;//0.2;
 float pidXD = 0.6;//0.85;
 
 //Pitch
-float pidYP = 0;//0.9;
-float pidYI = 0.001;//0.2;
-float pidYD = 0;//0.85;
+float pidYP = 1.4;//0.9;
+float pidYI = 0.5;//0.2;
+float pidYD = 0.6;//0.85;
 
 //Yaw
 float pidZP = 0;
