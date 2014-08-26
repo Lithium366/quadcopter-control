@@ -45,3 +45,5 @@ float pidYD = 0;//0.85;
 float pidZP = 0;
 float pidZI = 0;
 float pidZD = 0;
+
+float declinationAngle = 0.227;

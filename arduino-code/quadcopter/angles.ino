@@ -12,7 +12,6 @@ float getCompassData()
   MagnetometerScaled scaled = compass.ReadScaledAxis();
   int MilliGauss_OnThe_XAxis = scaled.XAxis;
   float heading = atan2(scaled.YAxis, scaled.XAxis);
-  float declinationAngle = 0.227;
   heading += declinationAngle;
   
   if(heading < 0)

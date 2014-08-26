@@ -77,9 +77,7 @@ void loop() {
   if (ThrottleVal > 400) {
     SetpointX = RollVal;
     SetpointY = PitchVal;
-    if (!SetpointZ) {
-      SetpointZ = anglez;
-    }
+    SetpointZ = anglez + YawVal;
     myPIDx.Compute(); 
     myPIDy.Compute();
     myPIDz.Compute();
