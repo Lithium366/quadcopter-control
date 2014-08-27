@@ -49,13 +49,13 @@ void setup() {
   SetpointY = 0;
   myPIDx.SetMode(AUTOMATIC);
   myPIDx.SetSampleTime(6);
-  myPIDx.SetOutputLimits(-100, 100);
+  myPIDx.SetOutputLimits(-200, 200);
   myPIDy.SetMode(AUTOMATIC);
   myPIDy.SetSampleTime(6);
-  myPIDy.SetOutputLimits(-100, 100);
+  myPIDy.SetOutputLimits(-200, 200);
   myPIDz.SetMode(AUTOMATIC);
   myPIDz.SetSampleTime(6);
-  myPIDz.SetOutputLimits(-100, 100);
+  myPIDz.SetOutputLimits(-200, 200);
   enginex1.attach(ENGINE1);
   enginex1.writeMicroseconds(0);
   enginex2.attach(ENGINE2);
@@ -91,7 +91,7 @@ void loop() {
     enginex3.writeMicroseconds(0);
     enginex4.writeMicroseconds(0);
   }
-
+Serial.println(anglex);
   //Debug info
   /*loopcount++;
   if (loopcount == 1) {
