@@ -33,7 +33,7 @@ PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, DIRECT);
 //Pitch PID
 PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, REVERSE);
 //Yaw PID
-PID myPIDz(&anglez, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, REVERSE);
+PID myPIDz(&anglez, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT);
 
 void setup() {
   Serial1.begin(57600);
@@ -77,7 +77,11 @@ void loop() {
   if (ThrottleVal > 400) {
     SetpointX = RollVal;
     SetpointY = PitchVal;
-    SetpointZ = anglez + YawVal;
+    if (!SetpointZ) {
+      SetpointZ = anglez;
+    }
+    //Serial.println(anglez);
+    //SetpointZ = anglez + YawVal;
     myPIDx.Compute(); 
     myPIDy.Compute();
     myPIDz.Compute();
@@ -91,7 +95,7 @@ void loop() {
     enginex3.writeMicroseconds(0);
     enginex4.writeMicroseconds(0);
   }
-Serial.println(anglex);
+//Serial.println(anglex);
   //Debug info
   /*loopcount++;
   if (loopcount == 1) {

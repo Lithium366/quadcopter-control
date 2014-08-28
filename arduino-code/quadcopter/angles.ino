@@ -8,9 +8,7 @@ long ptime = 0;
 
 float getCompassData()
 {
-  MagnetometerRaw raw = compass.ReadRawAxis();
   MagnetometerScaled scaled = compass.ReadScaledAxis();
-  int MilliGauss_OnThe_XAxis = scaled.XAxis;
   float heading = atan2(scaled.YAxis, scaled.XAxis);
   heading += declinationAngle;
   
@@ -21,6 +19,7 @@ float getCompassData()
     heading -= 2*PI;
     
   float headingDegrees = heading * 180/M_PI;
+  Serial.println(headingDegrees);
   return headingDegrees;
 }
 
