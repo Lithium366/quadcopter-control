@@ -4,7 +4,8 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 var Firmata = require('firmata');
-var SerialPort = require("serialport").SerialPort;
+var serialport = require("serialport");
+var SerialPort = serialport.SerialPort
 
 app.use(express.static(__dirname + "/public"));
 app.set('view engine', 'jade');
@@ -20,7 +21,7 @@ server.listen(3000, function() {
     console.log('Listening on port %d', server.address().port);
 });
 
-var port = "COM6";
+var port = "COM4";
 
 /*var board = new Firmata.Board(port, function (err) {
   if (err) {
@@ -31,13 +32,20 @@ var port = "COM6";
   console.log('Firmware: ' + board.firmware.name + '-' + board.firmware.version.major + '.' + board.firmware.version.minor);
 });*/
 
-var serialport = new SerialPort(port, {
-	baudrate: 57600
+var sp = new SerialPort(port, {
+	baudrate: 57600,
+    parser: serialport.parsers.readline("\r\n")
 });
 
-serialport.on('open', function(){
-    serialport.on('data', function(data){
-        io.emit('dataUpdated', data.toString());
-	console.log(data.toString());
+var jsobj = {};
+sp.on('open', function(){
+    sp.on('data', function(data){
+        var dataParsed = data.split(":");
+        if (dataParsed[0] === "devider") {
+            io.emit('dataUpdated', jsobj);
+            jsobj = {};
+        } else {
+            jsobj[dataParsed[0]] = dataParsed.splice(1, dataParsed.length);
+        }
     });
 });

@@ -6,24 +6,30 @@ socket.on('dataUpdated', function(msg){
 
 var buffer =  "";
 
+var quadcopter = angular.module('quadcopter', []);
+
 $(function () {
 
+    var data = false;
+    function setOnlineFalse() {
+        if (!data) {
+            $(window).trigger("onlineUpdated", false);
+        }
+        data = false;
+        window.setTimeout(setOnlineFalse, 500);
+    }
+    setOnlineFalse();
+
     $(window).on("dataUpdated", function (e, val) {
-        buffer += val;
-        if (buffer.length > 500) {
-          buffer = buffer.substr(buffer.length - 500, 500);
+        if (val.reciever) updateRCcontrols(val.reciever);
+        if (val.pid) {
+            $(window).trigger("pidUpdated", {values: val.pid});
         }
-        var sections = buffer.match(/\|1001100\|(.*)\|1001100\|/);
-        if (!sections || !sections[sections.length - 1]) return false;
-        var separatedSections = sections[sections.length - 1].split("|");
-        for (var i = 0; i < separatedSections.length; i++) {
-          var fields = separatedSections[i].split(":");
-          if (fields[0] === 'reciever') {
-            updateRCcontrols(fields.splice(1, fields.length));
-          } else if (fields[0] === "pid") {
-            $(window).trigger("pidUpdated", {values: fields.splice(1, fields.length)});
-          }
+        if (val.system) {
+            $(window).trigger("systemUpdated", {values: val.system});
         }
+        data = true;
+        $(window).trigger("onlineUpdated", true);
     });
 
     var updateRCcontrols = function (values) {

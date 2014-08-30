@@ -97,19 +97,19 @@ void loop() {
   }
 //Serial.println(anglex);
   //Debug info
-  /*loopcount++;
+  loopcount++;
   if (loopcount == 1) {
-    Serial1.print("1001100|");
     printRC();
-  } else if (loopcount == 50) {
+  } else if (loopcount == 4) {
     printAngles();
-  } else if (loopcount == 100) {
+  } else if (loopcount == 7) {
     printPID();
-  } else if (loopcount == 150) {
-    printSystem(); 
-    loopcount = 0;
-  }*/
-   
+  } else if (loopcount == 10) {
+    printSystem();
+  } else if (loopcount == 13) {
+    Serial1.println("devider");
+  } else if (loopcount == 16)
+   loopcount = 0;
 }
 
 void printPID () {
@@ -132,8 +132,8 @@ void printPID () {
     dtostrf(pidZP, 3, 1, pidZP_s);
     dtostrf(pidZI, 3, 1, pidZI_s);
     dtostrf(pidZD, 3, 1, pidZD_s);
-    sprintf(total, "pid:%s:%s:%s:%s:%s:%s:%s:%s:%s|", pidXP_s, pidXI_s, pidXD_s, pidYP_s, pidYI_s, pidYD_s, pidZP_s, pidZI_s, pidZD_s);
-    Serial1.print(total);
+    sprintf(total, "pid:%s:%s:%s:%s:%s:%s:%s:%s:%s", pidXP_s, pidXI_s, pidXD_s, pidYP_s, pidYI_s, pidYD_s, pidZP_s, pidZI_s, pidZD_s);
+    Serial1.println(total);
 }
 
 void printAngles() {
@@ -144,18 +144,18 @@ void printAngles() {
     dtostrf(anglex, 1, 3, anglex_s);
     dtostrf(angley, 1, 3, angley_s);
     dtostrf(anglez, 1, 3, anglez_s);
-    sprintf(total, "angles:%s:%s:%s|", anglex_s, angley_s, anglez_s);
-    Serial1.print(total);
+    sprintf(total, "angles:%s:%s:%s", anglex_s, angley_s, anglez_s);
+    Serial1.println(total);
 }
 
 void printRC() {
     char total[100];
-    sprintf(total, "reciever:%d:%d:%d:%d:%d:%d:%d:%d|", ThrottleVal, PitchVal, RollVal, YawVal, CH5Val, CH6Val, CH7Val, CH8Val);
-    Serial1.print(total);
+    sprintf(total, "reciever:%d:%d:%d:%d:%d:%d:%d:%d", ThrottleVal, PitchVal, RollVal, YawVal, CH5Val, CH6Val, CH7Val, CH8Val);
+    Serial1.println(total);
 }
 
 void printSystem() {
   char total[10];
-  sprintf(total, "system:%d|", dtime);
-  Serial1.print(total);
+  sprintf(total, "system:%d", dtime);
+  Serial1.println(total);
 }

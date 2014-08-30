@@ -3,7 +3,7 @@ html
     head
         title Quadcopter console 
         link(rel="stylesheet", href="/css/styles.css")
-    body
+    body(ng-app='quadcopter')
         div.main 
             block content
 
@@ -16,3 +16,5 @@ script(src="/socket.io/socket.io.js")
 script(src="/js/rc.js")
 script(src="/js/main.js")
 script(src="/js/pid.js")
+script(src="/js/system.js")
+script(src="/js/status.js")

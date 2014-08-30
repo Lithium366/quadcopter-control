@@ -8,11 +8,11 @@ block content
 			#container-yaw
 			#container-pitch
 			#container-roll
-		.status.clearfix
+		.status.clearfix(ng-controller='Status')
 			h3 Status
 			#container-serial
-				.title Serial data
-				.statusLight.red
+				.title Online
+				.statusLight(class='{{online ? "green" : "red"}}')
 			#container-gps
 				.title GPS data
 				.statusLight.orange
@@ -20,7 +20,7 @@ block content
 				.title Arm/Disarm
 				.statusLight.green
 		.settings
-			h3(ng-app='pidApp') PID settings
+			h3 PID settings
 				form(ng-controller='PidList')
 					.row(ng-repeat='(axe, pid) in pids')
 						h4 {{pid.name}} PID
@@ -33,6 +33,9 @@ block content
 					.row
 						input(type='button', id='savePid', value='Save')
 						input(type='button', id='resetPid', value='Reset')
+			h3 System
+				.system(ng-controller='systemController')
+					div Dtime: {{dtime}}
 	.rightPanel
 		.gauges
 			#container-speed
