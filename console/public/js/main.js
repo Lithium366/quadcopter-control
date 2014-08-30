@@ -4,31 +4,34 @@ socket.on('dataUpdated', function(msg){
     $(window).trigger("dataUpdated", msg);
 });
 
-var buffer =  "";
-
 var quadcopter = angular.module('quadcopter', []);
 
 $(function () {
 
-    var data = false;
-    function setOnlineFalse() {
-        if (!data) {
+    // If no new data in 200ms - set online indicator to false
+    var online = false;
+    function setOffline() {
+        if (!online) {
             $(window).trigger("onlineUpdated", false);
         }
-        data = false;
-        window.setTimeout(setOnlineFalse, 500);
+        online = false;
+        window.setTimeout(setOffline, 200);
     }
-    setOnlineFalse();
+    setOffline();
 
+    // Once serial data available, notify observers
     $(window).on("dataUpdated", function (e, val) {
-        if (val.reciever) updateRCcontrols(val.reciever);
+        if (val.reciever) {
+            updateRCcontrols(val.reciever);
+        }
         if (val.pid) {
             $(window).trigger("pidUpdated", {values: val.pid});
         }
         if (val.system) {
             $(window).trigger("systemUpdated", {values: val.system});
         }
-        data = true;
+        // Set online indicator to true every time new data came
+        online = true;
         $(window).trigger("onlineUpdated", true);
     });
 
