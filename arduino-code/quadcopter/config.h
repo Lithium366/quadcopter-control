@@ -1,4 +1,3 @@
-
 // RC pins
 #define THROTTLE_IN_PIN A10 //CH3
 #define ROLL_IN_PIN A8 //CH1
@@ -27,8 +26,8 @@ int minThrottle = 300;
 int maxThrottle = 2300;
 
 // Correction values to keep horison position
-double pitchCorrection = -7;
-double rollCorrection = -2;
+double pitchCorrection = -12.5;
+double rollCorrection = -2.5;
 double yawCorrection = 0;
 
 //Roll
@@ -42,8 +41,8 @@ float pidYI = 1;//2;//3;//0.2;
 float pidYD = 0.9;//0.9;//0.71;//3;//0.85;
 
 //Yaw
-float pidZP = 0;//10;
+float pidZP = 1.5;//10;
 float pidZI = 0;//0;
-float pidZD = 0;//1.2;
+float pidZD = 0.35;//1.2;
 
 float declinationAngle = 0.227;

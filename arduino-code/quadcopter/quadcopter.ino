@@ -27,19 +27,17 @@ Servo enginex2; //Top right
 Servo enginex3; //Bottom left
 Servo enginex4; //Bottom right
 
-double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ;
+double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ, deltaZ, errorZ;
 //Roll PID
-PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, DIRECT);
+PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, REVERSE);
 //Pitch PID
-PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, REVERSE);
+PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, DIRECT);
 //Yaw PID
-PID myPIDz(&anglez, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT);
+PID myPIDz(&errorZ, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT);
 
 void setup() {
   Serial1.begin(57600);
   Serial.begin(57600);
-  /*Firmata.setFirmwareVersion(0, 1);
-  Firmata.begin(Serial1);*/
   acc.begin();
   gyro.enableDefault();
   compass = HMC5883L();
@@ -47,6 +45,7 @@ void setup() {
   compass.SetMeasurementMode(Measurement_Continuous);
   SetpointX = 0;
   SetpointY = 0;
+  SetpointZ = 0;
   myPIDx.SetMode(AUTOMATIC);
   myPIDx.SetSampleTime(6);
   myPIDx.SetOutputLimits(-200, 200);
@@ -70,18 +69,12 @@ void setup() {
 void loop() {
   readRC();
   getAngles();
-  /*while(Firmata.available()) {
-    Firmata.processInput();
-  }*/
 
   if (ThrottleVal > 400) {
     SetpointX = RollVal;
-    SetpointY = PitchVal;
-    if (!SetpointZ) {
-      SetpointZ = anglez;
-    }
-    //Serial.println(anglez);
-    //SetpointZ = anglez + YawVal;
+    SetpointY = PitchVal;    
+    computeErrorZ();
+
     myPIDx.Compute(); 
     myPIDy.Compute();
     myPIDz.Compute();
@@ -108,8 +101,25 @@ void loop() {
     printSystem();
   } else if (loopcount == 13) {
     Serial1.println("devider");
-  } else if (loopcount == 16)
-   loopcount = 0;
+  } else if (loopcount == 16) {
+    loopcount = 0;
+  }
+}
+
+void computeErrorZ () {
+  if (!deltaZ) {
+    deltaZ = anglez;
+  }    
+  if(abs(YawVal) > 5) {
+    deltaZ = anglez + YawVal;
+  }
+  errorZ = anglez - deltaZ;
+  if(errorZ > 180) {
+    errorZ -= 360;
+  } else if (errorZ < -180) {
+    errorZ += 360;
+  }
+  // if wind will rotate to 180/-180 - Quad will crash  
 }
 
 void printPID () {

@@ -19,7 +19,6 @@ float getCompassData()
     heading -= 2*PI;
     
   float headingDegrees = heading * 180/M_PI;
-  Serial.println(headingDegrees);
   return headingDegrees;
 }
 
@@ -42,7 +41,6 @@ void getAngles()
   ptime = millis();
 
   anglex = 0.98 * (anglex + gyro.g.x * 0.00875 * dtime / 1000 * -1) + 0.02 * roll;
-  Serial.print(anglex);
   angley = 0.98 * (angley + gyro.g.y * 0.00875 * dtime / 1000 * -1) + 0.02 * pitch;
   anglez = 0.98 * (anglez + gyro.g.z * 0.00875 * dtime / 1000 * -1) + 0.02 * yaw;
 }
