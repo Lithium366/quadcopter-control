@@ -28,8 +28,11 @@ void getAngles()
   acc.read(&Xg, &Yg, &Zg);
   gyro.read();
   fXg = Xg * alpha + (fXg * (1.0 - alpha));
+  vybrox += abs(fXg);
   fYg = Yg * alpha + (fYg * (1.0 - alpha));
+  vybroy += abs(fYg);
   fZg = Zg * alpha + (fZg * (1.0 - alpha));
+  vybroz += abs(fZg);
   roll  = (atan2(-fYg, fZg)*180.0)/M_PI + rollCorrection;
   pitch = (atan2(fXg, sqrt(fYg*fYg + fZg*fZg))*180.0)/M_PI + pitchCorrection;
   yaw = getCompassData() + yawCorrection;
@@ -40,9 +43,6 @@ void getAngles()
   }
   ptime = millis();
 
-Serial.print(anglex);
-Serial.print(":");
-Serial.println(angley);
   anglex = 0.98 * (anglex + gyro.g.x * 0.00875 * dtime / 1000 * -1) + 0.02 * roll;
   angley = 0.98 * (angley + gyro.g.y * 0.00875 * dtime / 1000 * -1) + 0.02 * pitch;
   anglez = 0.98 * (anglez + gyro.g.z * 0.00875 * dtime / 1000 * -1) + 0.02 * yaw;

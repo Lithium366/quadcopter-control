@@ -10,40 +10,47 @@
 #include "config.h"
 #include <TinyGPS.h>
 
+// Values of RC stick controls
 int ThrottleVal, PitchVal, RollVal, YawVal, CH6Val, CH7Val, CH8Val;
 boolean CH5Val;
 
 ADXL345 acc; //Accelerometer data
 L3G4200D gyro; //Gyro data
 HMC5883L compass; //Compass data
-TinyGPS gps;
+TinyGPS gps; //GPS data
 
-double anglex = 0; //Roll
-double angley = 0; //Pitch
-double anglez = 0; //Yaw
+double anglex = 0; //Roll angle in degrees
+double angley = 0; //Pitch angle in degrees
+double anglez = 0; //Yaw angle in degrees relatively to the North
+double vybrox = 0;
+double vybroy = 0;
+double vybroz = 0;
+double vybroxsum = 0;
+double vybroysum = 0;
+double vybrozsum = 0;
 int dtime = 0; //Loop time
-int loopcount = 0; //For
+int loopcount = 0; //Telemetry loop counter
+int armcounter = 0;
+bool armed = false;
 
-Servo enginex1; //Top left
-Servo enginex2; //Top right
-Servo enginex3; //Bottom left
-Servo enginex4; //Bottom right
+Servo enginex1; //Top left engine
+Servo enginex2; //Top right engine
+Servo enginex3; //Bottom left engine
+Servo enginex4; //Bottom right engine
 
 // GPS data
 float flat, flon;
 unsigned long age;
 
-double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ, deltaZ, errorZ;
-//Roll PID
-PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, REVERSE);
-//Pitch PID
-PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, DIRECT);
-//Yaw PID
-PID myPIDz(&errorZ, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT);
+double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ, deltaZ, errorZ; // PID setpoints and errors
+PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, REVERSE); //Roll PID
+PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, DIRECT); //Pitch PID
+PID myPIDz(&errorZ, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT); //Yaw PID
 
 void setup() {
-  Serial1.begin(57600);
-  Serial.begin(57600);
+  Serial1.begin(57600); //3DR telemetry (always 57600)
+  Serial.begin(57600); //USB serial
+  initGps();
   acc.begin();
   gyro.enableDefault();
   compass = HMC5883L();
@@ -51,7 +58,7 @@ void setup() {
   compass.SetMeasurementMode(Measurement_Continuous);
   SetpointX = 0;
   SetpointY = 0;
-  SetpointZ = 0;
+  SetpointZ = 0; //Must be always 0
   myPIDx.SetMode(AUTOMATIC);
   myPIDx.SetSampleTime(6);
   myPIDx.SetOutputLimits(-200, 200);
@@ -69,47 +76,58 @@ void setup() {
   enginex3.writeMicroseconds(0);
   enginex4.attach(ENGINE4);
   enginex4.writeMicroseconds(0);
-  initGps();
   delay(1000);
 }
 
 void loop() {
-  readRC();
-  getAngles();
-  //readGps();
+  readRC(); //Read data from RC
+  getAngles(); //Read angles from sensors
+  armDisarm(); //Arm/disarm
+  //readGps(); //Read GPS sensor
+  calculatePID();
+  engineVelocities();
+  telemetry();
+}
 
-  if (ThrottleVal > 400) {
+void calculatePID () {
+  if (armed) {
     SetpointX = RollVal;
-    SetpointY = PitchVal;    
+    SetpointY = PitchVal;
     computeErrorZ();
-    myPIDx.Compute(); 
+    myPIDx.Compute();
     myPIDy.Compute();
     myPIDz.Compute();
-    enginex1.writeMicroseconds(ThrottleVal - OutputY - OutputX - OutputZ);
-    enginex2.writeMicroseconds(ThrottleVal - OutputY + OutputX + OutputZ);
-    enginex3.writeMicroseconds(ThrottleVal + OutputY - OutputX + OutputZ);
-    enginex4.writeMicroseconds(ThrottleVal + OutputY + OutputX - OutputZ);
+  }
+}
+
+void engineVelocities () {
+  if (armed) {
+    enginex1.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle - OutputY - OutputX - OutputZ);
+    enginex2.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle - OutputY + OutputX + OutputZ);
+    enginex3.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle + OutputY - OutputX + OutputZ);
+    enginex4.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle + OutputY + OutputX - OutputZ);
   } else {
     enginex1.writeMicroseconds(0);
     enginex2.writeMicroseconds(0);
     enginex3.writeMicroseconds(0);
     enginex4.writeMicroseconds(0);
   }
-//Serial.println(anglex);
-  //Debug info
-  loopcount++;
-  if (loopcount == 1) {
-    printRC();
-  } else if (loopcount == 4) {
-    printAngles();
-  } else if (loopcount == 7) {
-    printPID();
-  } else if (loopcount == 10) {
-    printSystem();
-  } else if (loopcount == 13) {
-    Serial1.println("devider");
-  } else if (loopcount == 16) {
-    loopcount = 0;
+}
+
+void armDisarm () {
+  // Hold throttle and pitch sticks in bottom position for arm_time_ms time
+  if (ThrottleVal <= (minThrottle + 5) && PitchVal <= (maxPitch * -1 + 1)) {
+    armcounter++;
+    if (armcounter * dtime >= arm_time_ms) {
+      armcounter = 0;
+      if (armed) {
+        armed = false;
+      } else {
+        armed = true;
+      }
+    }
+  } else {
+    armcounter = 0;
   }
 }
 
@@ -127,52 +145,4 @@ void computeErrorZ () {
     errorZ += 360;
   }
   // if wind will rotate to 180/-180 - Quad will crash  
-}
-
-void printPID () {
-    char pidXP_s[10];
-    char pidXI_s[10];
-    char pidXD_s[10];
-    char pidYP_s[10];
-    char pidYI_s[10];
-    char pidYD_s[10];
-    char pidZP_s[10];
-    char pidZI_s[10];
-    char pidZD_s[10];
-    char total[100];
-    dtostrf(pidXP, 3, 1, pidXP_s);
-    dtostrf(pidXI, 3, 1, pidXI_s);
-    dtostrf(pidXD, 3, 1, pidXD_s);
-    dtostrf(pidYP, 3, 1, pidYP_s);
-    dtostrf(pidYI, 3, 1, pidYI_s);
-    dtostrf(pidYD, 3, 1, pidYD_s);
-    dtostrf(pidZP, 3, 1, pidZP_s);
-    dtostrf(pidZI, 3, 1, pidZI_s);
-    dtostrf(pidZD, 3, 1, pidZD_s);
-    sprintf(total, "pid:%s:%s:%s:%s:%s:%s:%s:%s:%s", pidXP_s, pidXI_s, pidXD_s, pidYP_s, pidYI_s, pidYD_s, pidZP_s, pidZI_s, pidZD_s);
-    Serial1.println(total);
-}
-
-void printAngles() {
-    char anglex_s[10];
-    char angley_s[10];
-    char anglez_s[10];
-    char total[40];
-    dtostrf(anglex, 1, 3, anglex_s);
-    dtostrf(angley, 1, 3, angley_s);
-    dtostrf(anglez, 1, 3, anglez_s);
-    sprintf(total, "angles:%s:%s:%s", anglex_s, angley_s, anglez_s);
-    Serial1.println(total);
-}
-
-void printRC() {
-    char total[100];
-    sprintf(total, "reciever:%d:%d:%d:%d:%d:%d:%d:%d", ThrottleVal, PitchVal, RollVal, YawVal, CH5Val, CH6Val, CH7Val, CH8Val);
-    Serial1.println(total);
-}
-
-void printSystem() {
-  char total[10];
-  sprintf(total, "system:%d", dtime);
-  Serial1.println(total);
 }

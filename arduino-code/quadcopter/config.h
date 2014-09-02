@@ -14,6 +14,11 @@
 #define ENGINE3 3
 #define ENGINE4 5
 
+// Turn on /off telemetry
+bool debug_mode = true;
+// Time that sticks must be in arm/disarm position to arm/disarm
+int arm_time_ms = 5000;
+
 // Values range from RC reciever
 int rcMin = 1058;
 int rcMax = 1860;
@@ -29,6 +34,7 @@ int maxThrottle = 2300;
 double pitchCorrection = -5.7;
 double rollCorrection = -1.3;
 double yawCorrection = 0;
+int minEngineRPM = 600;
 
 //Roll
 float pidXP = 6;//2.2;//7;//3;//0.9;

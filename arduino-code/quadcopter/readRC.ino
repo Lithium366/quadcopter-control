@@ -25,7 +25,7 @@ void readRC() {
   PCintPort::attachInterrupt(CH7_IN_PIN, calcCH7,CHANGE);
   PCintPort::attachInterrupt(CH8_IN_PIN, calcCH8,CHANGE);
   
-  ThrottleVal = map(unThrottleInShared, rcMin, rcMax, minThrottle, maxThrottle);
+  ThrottleVal = map(unThrottleInShared, rcMin, rcMax, minThrottle, maxThrottle - minEngineRPM);
   if (ThrottleVal < 0) {
     ThrottleVal = 0;
   }
