@@ -27,16 +27,16 @@ void telemetry () {
 }
 
 void printPID () {
-    char pidXP_s[10];
-    char pidXI_s[10];
-    char pidXD_s[10];
-    char pidYP_s[10];
-    char pidYI_s[10];
-    char pidYD_s[10];
-    char pidZP_s[10];
-    char pidZI_s[10];
-    char pidZD_s[10];
-    char total[100];
+    char pidXP_s[5];
+    char pidXI_s[5];
+    char pidXD_s[5];
+    char pidYP_s[5];
+    char pidYI_s[5];
+    char pidYD_s[5];
+    char pidZP_s[5];
+    char pidZI_s[5];
+    char pidZD_s[5];
+    char total[50];
     dtostrf(pidXP, 3, 1, pidXP_s);
     dtostrf(pidXI, 3, 1, pidXI_s);
     dtostrf(pidXD, 3, 1, pidXD_s);
@@ -69,7 +69,7 @@ void printAngles() {
 }
 
 void printRC() {
-    char total[100];
+    char total[50];
     sprintf(total, "reciever:%d:%d:%d:%d:%d:%d:%d:%d", ThrottleVal, PitchVal, RollVal, YawVal, CH5Val, CH6Val, CH7Val, CH8Val);
     Serial1.println(total);
 }
@@ -84,8 +84,8 @@ void printGPS() {
   char total[35];
   char flat_s[15];
   char flon_s[15];
-  dtostrf(flat, 3, 12, flat_s);
-  dtostrf(flon, 3, 12, flon_s);
+  dtostrf(flat, 12, 3, flat_s);
+  dtostrf(flon, 12, 3, flon_s);
   sprintf(total, "gps:%s:%s", flat_s, flon_s);
   Serial1.println(total);
 }
