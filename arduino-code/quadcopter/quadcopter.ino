@@ -8,6 +8,7 @@
 #include <HMC5883L.h>
 #include <PID_v1.h>
 #include "config.h"
+#include <TinyGPS.h>
 
 int ThrottleVal, PitchVal, RollVal, YawVal, CH6Val, CH7Val, CH8Val;
 boolean CH5Val;
@@ -15,6 +16,7 @@ boolean CH5Val;
 ADXL345 acc; //Accelerometer data
 L3G4200D gyro; //Gyro data
 HMC5883L compass; //Compass data
+TinyGPS gps;
 
 double anglex = 0; //Roll
 double angley = 0; //Pitch
@@ -26,6 +28,10 @@ Servo enginex1; //Top left
 Servo enginex2; //Top right
 Servo enginex3; //Bottom left
 Servo enginex4; //Bottom right
+
+// GPS data
+float flat, flon;
+unsigned long age;
 
 double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ, deltaZ, errorZ;
 //Roll PID
@@ -63,17 +69,19 @@ void setup() {
   enginex3.writeMicroseconds(0);
   enginex4.attach(ENGINE4);
   enginex4.writeMicroseconds(0);
+  initGps();
   delay(1000);
 }
 
 void loop() {
   readRC();
   getAngles();
-
-  if (ThrottleVal > 400) {
-    SetpointX = RollVal;
+  //readGps();
+  SetpointX = RollVal;
     SetpointY = PitchVal;    
     computeErrorZ();
+
+  if (ThrottleVal > 400) {
 
     myPIDx.Compute(); 
     myPIDy.Compute();

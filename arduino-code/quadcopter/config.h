@@ -26,22 +26,22 @@ int minThrottle = 300;
 int maxThrottle = 2300;
 
 // Correction values to keep horison position
-double pitchCorrection = -12.5;
-double rollCorrection = -2.5;
+double pitchCorrection = -4.5;
+double rollCorrection = -3.8;
 double yawCorrection = 0;
 
 //Roll
-float pidXP = 7;//2.2;//7;//3;//0.9;
+float pidXP = 6;//2.2;//7;//3;//0.9;
 float pidXI = 1;//2;//0.2;
-float pidXD = 0.9;//0.65;//0.95;//0.71;//0.85;
+float pidXD = 0.85;//0.65;//0.95;//0.71;//0.85;
 
 //Pitch
-float pidYP = 7;//7;//3;//7;//0.9;
+float pidYP = 6;//7;//3;//7;//0.9;
 float pidYI = 1;//2;//3;//0.2;
-float pidYD = 0.9;//0.9;//0.71;//3;//0.85;
+float pidYD = 0.95;//0.9;//0.71;//3;//0.85;
 
 //Yaw
-float pidZP = 1.5;//10;
+float pidZP = 3;//10;
 float pidZI = 0;//0;
 float pidZD = 0.35;//1.2;
 
