@@ -44,7 +44,7 @@ setTimeout(function () {
   if (new_data_available) {
     logger.write(loggerData + "\r\n");
   } else {
-    logger.write("no connection\r\n");
+    logger.write("no updates\r\n");
   }
   new_data_available = false;
 }, 5);
