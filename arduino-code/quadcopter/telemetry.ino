@@ -5,6 +5,12 @@ void telemetry () {
     if (loopcount == 1) {
       printRC();
     } else if (loopcount == 4) {
+      vybroxsum = vybrox / 16;
+      vybroysum = vybroy / 16;
+      vybrozsum = vybroz / 16;
+      vybrox = 0;
+      vybroy = 0;
+      vybroz = 0;
       printAngles();
     } else if (loopcount == 7) {
       printPID();
@@ -13,12 +19,6 @@ void telemetry () {
     } else if (loopcount == 13) {
       Serial1.println("devider");
     } else if (loopcount == 16) {
-      vybroxsum = vybrox / loopcount;
-      vybroysum = vybroy / loopcount;
-      vybrozsum = vybroz / loopcount;
-      vybrox = 0;
-      vybroy = 0;
-      vybroz = 0;
       loopcount = 0;
     }
   }
