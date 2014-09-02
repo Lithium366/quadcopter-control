@@ -83,7 +83,7 @@ void loop() {
   readRC(); //Read data from RC
   getAngles(); //Read angles from sensors
   armDisarm(); //Arm/disarm
-  //readGps(); //Read GPS sensor
+  readGps(); //Read GPS sensor
   calculatePID();
   engineVelocities();
   telemetry();

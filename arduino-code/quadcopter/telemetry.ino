@@ -5,9 +5,9 @@ void telemetry () {
     if (loopcount == 1) {
       printRC();
     } else if (loopcount == 4) {
-      vybroxsum = vybrox / 16;
-      vybroysum = vybroy / 16;
-      vybrozsum = vybroz / 16;
+      vybroxsum = vybrox / 19;
+      vybroysum = vybroy / 19;
+      vybrozsum = vybroz / 19;
       vybrox = 0;
       vybroy = 0;
       vybroz = 0;
@@ -17,8 +17,10 @@ void telemetry () {
     } else if (loopcount == 10) {
       printSystem();
     } else if (loopcount == 13) {
-      Serial1.println("devider");
+      printGPS();
     } else if (loopcount == 16) {
+      Serial1.println("devider");
+    } else if (loopcount == 19) {
       loopcount = 0;
     }
   }
@@ -75,5 +77,15 @@ void printRC() {
 void printSystem() {
   char total[10];
   sprintf(total, "system:%d", dtime);
+  Serial1.println(total);
+}
+
+void printGPS() {
+  char total[35];
+  char flat_s[15];
+  char flon_s[15];
+  dtostrf(flat, 3, 12, flat_s);
+  dtostrf(flon, 3, 12, flon_s);
+  sprintf(total, "gps:%s:%s", flat_s, flon_s);
   Serial1.println(total);
 }
