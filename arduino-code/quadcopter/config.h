@@ -26,8 +26,8 @@ int minThrottle = 300;
 int maxThrottle = 2300;
 
 // Correction values to keep horison position
-double pitchCorrection = -4.5;
-double rollCorrection = -3.8;
+double pitchCorrection = -5.7;
+double rollCorrection = -1.3;
 double yawCorrection = 0;
 
 //Roll

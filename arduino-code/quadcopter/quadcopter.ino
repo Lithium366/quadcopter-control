@@ -77,12 +77,11 @@ void loop() {
   readRC();
   getAngles();
   //readGps();
-  SetpointX = RollVal;
-    SetpointY = PitchVal;    
-    computeErrorZ();
 
   if (ThrottleVal > 400) {
-
+    SetpointX = RollVal;
+    SetpointY = PitchVal;    
+    computeErrorZ();
     myPIDx.Compute(); 
     myPIDy.Compute();
     myPIDz.Compute();
