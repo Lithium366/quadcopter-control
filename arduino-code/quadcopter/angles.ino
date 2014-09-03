@@ -4,6 +4,8 @@ double fXg = 0;
 double fYg = 0;
 double fZg = 0;
 
+int znak = 1;
+
 long ptime = 0;
 
 float getCompassData()
@@ -28,11 +30,12 @@ void getAngles()
   acc.read(&Xg, &Yg, &Zg);
   gyro.read();
   fXg = Xg * alpha + (fXg * (1.0 - alpha));
-  vybrox += abs(fXg);
+  vybrox += abs(Xg) * znak;
   fYg = Yg * alpha + (fYg * (1.0 - alpha));
-  vybroy += abs(fYg);
+  vybroy += abs(Yg) * znak;
   fZg = Zg * alpha + (fZg * (1.0 - alpha));
-  vybroz += abs(fZg);
+  vybroz += abs(Zg) * znak;
+  znak = znak * -1;
   roll  = (atan2(-fYg, fZg)*180.0)/M_PI + rollCorrection;
   pitch = (atan2(fXg, sqrt(fYg*fYg + fZg*fZg))*180.0)/M_PI + pitchCorrection;
   yaw = getCompassData() + yawCorrection;

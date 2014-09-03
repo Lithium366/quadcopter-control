@@ -2,12 +2,14 @@ void telemetry () {
   //Telemetry info
   if (debug_mode) {
     loopcount++;
+    
+    
     if (loopcount == 1) {
       printRC();
     } else if (loopcount == 4) {
-      vybroxsum = vybrox / 16;
-      vybroysum = vybroy / 16;
-      vybrozsum = vybroz / 16;
+      vybroxsum = abs(vybrox / (16 / 2));
+      vybroysum = abs(vybroy / (16 / 2));
+      vybrozsum = abs(vybroz / (16 / 2));
       vybrox = 0;
       vybroy = 0;
       vybroz = 0;
@@ -59,10 +61,10 @@ void printAngles() {
     dtostrf(anglex, 1, 3, anglex_s);
     dtostrf(angley, 1, 3, angley_s);
     dtostrf(anglez, 1, 3, anglez_s);
-    dtostrf(vybroxsum, 1, 3, vybroxsum_s);
-    dtostrf(vybroysum, 1, 3, vybroysum_s);
-    dtostrf(vybrozsum, 1, 3, vybrozsum_s);
-    sprintf(total, "angles:%s:%s:%s", anglex_s, angley_s, anglez_s, vybroxsum_s, vybroysum_s, vybrozsum_s);
+    dtostrf(vybroxsum, 3, 3, vybroxsum_s);
+    dtostrf(vybroysum, 3, 3, vybroysum_s);
+    dtostrf(vybrozsum, 3, 3, vybrozsum_s);
+    sprintf(total, "angles:%s:%s:%s:%s:%s:%s", anglex_s, angley_s, anglez_s, vybroxsum_s, vybroysum_s, vybrozsum_s);
     Serial1.println(total);
 }
 
@@ -76,8 +78,8 @@ void printSystem() {
   char total[40];
   char flat_s[15];
   char flon_s[15];
-  dtostrf(flat, 12, 3, flat_s);
-  dtostrf(flon, 12, 3, flon_s);
-  sprintf(total, "system:%d:%s:%s", dtime, flat_s, flon_s);
+  dtostrf(flat, 3, 12, flat_s);
+  dtostrf(flon, 3, 12, flon_s);
+  sprintf(total, "system:%d:%s:%s:%d", dtime, flat_s, flon_s, armed ? 1 : 0);
   Serial1.println(total);
 }

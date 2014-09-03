@@ -35,24 +35,13 @@ var logger = fs.createWriteStream('logs/log_' + ((nowDate.getMonth() < 9) ? '0' 
     '-' + ((nowDate.getDate() >= 10) ? '' : '0') + nowDate.getDate() +
     '-' + nowDate.getFullYear() +
     '-' + ((nowDate.getHours() >= 10) ? '' : '0') + nowDate.getHours() +
-    ':' + ((nowDate.getMinutes() >= 10) ? '' : '0') + nowDate.getMinutes() +
-    ':' + ((nowDate.getSeconds() >= 10) ? '' : '0') + nowDate.getSeconds() +
+    '-' + ((nowDate.getMinutes() >= 10) ? '' : '0') + nowDate.getMinutes() +
+    '-' + ((nowDate.getSeconds() >= 10) ? '' : '0') + nowDate.getSeconds() +
     '.txt', {'flags': 'a'});
-var loggerData = "";
-var new_data_available = false;
-setTimeout(function () {
-  if (new_data_available) {
-    logger.write(loggerData + "\r\n");
-  } else {
-    logger.write("no updates\r\n");
-  }
-  new_data_available = false;
-}, 5);
 
 sp.on('open', function () {
   sp.on('data', function (data) {
-    new_data_available = true;
-    loggerData = data;
+    logger.write(data + "\r\n");
     var dataParsed = data.split(":");
     if (dataParsed[0] === "devider") {
       io.emit('dataUpdated', jsobj);

@@ -52,6 +52,7 @@ void setup() {
   Serial.begin(57600); //USB serial
   initGps();
   acc.begin();
+  acc.setRange(ADXL345::RANGE_2G);
   gyro.enableDefault();
   compass = HMC5883L();
   compass.SetScale(1.3);
@@ -116,7 +117,7 @@ void engineVelocities () {
 
 void armDisarm () {
   // Hold throttle and pitch sticks in bottom position for arm_time_ms time
-  if (ThrottleVal <= (minThrottle + 5) && PitchVal <= (maxPitch * -1 + 1)) {
+  if (ThrottleVal <= (minThrottle + 100) && PitchVal <= (maxPitch * -1 + 1)) {
     armcounter++;
     if (armcounter * dtime >= arm_time_ms) {
       armcounter = 0;

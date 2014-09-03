@@ -34,7 +34,7 @@ int maxThrottle = 2300;
 double pitchCorrection = -5.7;
 double rollCorrection = -1.3;
 double yawCorrection = 0;
-int minEngineRPM = 600;
+int minEngineRPM = 700;
 
 //Roll
 float pidXP = 6;//2.2;//7;//3;//0.9;
