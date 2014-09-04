@@ -10,6 +10,7 @@ var fs = require('fs');
 app.use(express.static(__dirname + "/public"));
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
+app.locals.pretty = true;
 
 app.get('/', function(req, res){
   res.render('index');

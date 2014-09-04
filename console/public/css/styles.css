@@ -137,9 +137,27 @@ h3 {
     margin-left: -7px;
     position: absolute;
     top: 56px;
-    transform-origin: 50% 44px 0;
+    transform-origin: 50% 44px;
     width: 15px;
 }
-#container-vspeed .arrow.big {
+.gaugeContainer#container-vspeed .arrow.big {
     transform: rotate(270deg);
 }
+
+#container-horizon img {
+    position: relative;
+}
+
+.gaugeContainer .compass_scale {
+    position: absolute;
+    top: 34px;
+    left: 34px;
+    transform-origin: 50% 50%;
+}
+
+.gaugeContainer svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
