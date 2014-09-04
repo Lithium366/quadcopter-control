@@ -38,11 +38,20 @@ block content
 					div Dtime: {{dtime}}
 	.rightPanel
 		.gauges
-			#container-speed
-			#container-vspeed
-			#container-altimeter
-			#container-heading
-			#container-facing
+			.gaugesGroup
+				#container-speed.gaugeContainer
+					img(src='/images/airspeed.png', class='gauge')
+					img(src='/images/arrow_long.png', class='arrow big')
+				#container-vspeed.gaugeContainer
+					img(src='/images/atitude.png', class='gauge')
+				#container-altimeter.gaugeContainer
+					img(src='/images/altimeter.png', class='gauge')
+			.gaugesGroup
+				#container-relativeDirection.gaugeContainer
+				#container-heading.gaugeContainer
+					img(src='/images/compass.png', class='gauge')
+				#container-facing.gaugeContainer
+					img(src='/images/vert_speed.png', class='gauge')
 		.map
 			#container-gmap
 

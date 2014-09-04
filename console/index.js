@@ -24,10 +24,10 @@ server.listen(3000, function() {
 
 var port = "COM4";
 
-var sp = new SerialPort(port, {
+/*var sp = new SerialPort(port, {
   baudrate: 57600,
   parser: serialport.parsers.readline("\r\n")
-});
+});*/
 
 var jsobj = {};
 var nowDate = new Date();
@@ -39,7 +39,7 @@ var logger = fs.createWriteStream('logs/log_' + ((nowDate.getMonth() < 9) ? '0' 
     '-' + ((nowDate.getSeconds() >= 10) ? '' : '0') + nowDate.getSeconds() +
     '.txt', {'flags': 'a'});
 
-sp.on('open', function () {
+/*sp.on('open', function () {
   sp.on('data', function (data) {
     logger.write(data + "\r\n");
     var dataParsed = data.split(":");
@@ -50,5 +50,5 @@ sp.on('open', function () {
       jsobj[dataParsed[0]] = dataParsed.splice(1, dataParsed.length);
     }
   });
-});
+});*/
 
