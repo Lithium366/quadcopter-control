@@ -4,9 +4,9 @@ void telemetry () {
     loopcount++;
     
     if (loopcount == 25) {
-      vybroxsum = ":";
-      vybroysum = ":";
-      vybrozsum = ":";
+      vybroxsum = "";
+      vybroysum = "";
+      vybrozsum = "";
       for (int i = 0; i < loopcount; i++) {
         char tmp[5];
         dtostrf(vybrox[i] * 1000, 3, 0, tmp);
@@ -19,11 +19,11 @@ void telemetry () {
         vybrozsum += ":";
         vybrozsum += tmp;
       }
-      Serial1.print("vybrox:");
+      Serial1.print("vybrox");
       Serial1.println(vybroxsum);
-      Serial1.print("vybroy:");
+      Serial1.print("vybroy");
       Serial1.println(vybroysum);
-      Serial1.print("vybroz:");
+      Serial1.print("vybroz");
       Serial1.println(vybrozsum);
       printRC();
       printAngles();
@@ -63,7 +63,7 @@ void printAngles() {
     char anglex_s[10];
     char angley_s[10];
     char anglez_s[10];
-    char total[70]
+    char total[70];
     dtostrf(anglex, 1, 1, anglex_s);
     dtostrf(angley, 1, 1, angley_s);
     dtostrf(anglez, 1, 1, anglez_s);
@@ -78,11 +78,12 @@ void printRC() {
 }
 
 void printSystem() {
+  counter++;
   char total[40];
   char flat_s[15];
   char flon_s[15];
   dtostrf(flat, 3, 12, flat_s);
   dtostrf(flon, 3, 12, flon_s);
-  sprintf(total, "system:%d:%s:%s:%d", dtime, flat_s, flon_s, armed ? 1 : 0);
+  sprintf(total, "system:%d:%d:%s:%s:%d", dtime, counter, flat_s, flon_s, armed ? 1 : 0);
   Serial1.println(total);
 }

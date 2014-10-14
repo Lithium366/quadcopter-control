@@ -15,8 +15,19 @@ app.locals.pretty = true;
 app.get('/', function(req, res){
   res.render('index');
 });
+
 app.get('/logs', function(req, res){
-  res.render('logs');
+    res.render('logs');
+});
+
+io.on('connection', function (socket) {
+
+    socket.on('getFile', function () {
+        var files = fs.readdirSync('public/logs');
+        var data = fs.readFileSync('public/logs/' + files[files.length - 1], 'utf8');
+        io.emit('sendFile', data);
+    });
+
 });
 
 server.listen(3000, function() {
@@ -25,14 +36,15 @@ server.listen(3000, function() {
 
 var port = "/dev/tty.SLAB_USBtoUART";
 
-var sp = new SerialPort(port, {
+/*var sp = new SerialPort(port, {
   baudrate: 57600,
   parser: serialport.parsers.readline("\r\n")
 });
 
-var jsobj = {};
-var nowDate = new Date();
-var logger = fs.createWriteStream('logs/log_' + ((nowDate.getMonth() < 9) ? '0' : '') + (nowDate.getMonth() + 1) +
+sp.on('open', function () {
+  var jsobj = {};
+  var nowDate = new Date();
+  var logger = fs.createWriteStream('public/logs/log_' + ((nowDate.getMonth() < 9) ? '0' : '') + (nowDate.getMonth() + 1) +
     '-' + ((nowDate.getDate() >= 10) ? '' : '0') + nowDate.getDate() +
     '-' + nowDate.getFullYear() +
     '-' + ((nowDate.getHours() >= 10) ? '' : '0') + nowDate.getHours() +
@@ -40,7 +52,6 @@ var logger = fs.createWriteStream('logs/log_' + ((nowDate.getMonth() < 9) ? '0' 
     '-' + ((nowDate.getSeconds() >= 10) ? '' : '0') + nowDate.getSeconds() +
     '.txt', {'flags': 'a'});
 
-sp.on('open', function () {
   sp.on('data', function (data) {
     logger.write(data + "\r\n");
     var dataParsed = data.split(":");
@@ -51,5 +62,5 @@ sp.on('open', function () {
       jsobj[dataParsed[0]] = dataParsed.splice(1, dataParsed.length);
     }
   });
-});
+});*/
 

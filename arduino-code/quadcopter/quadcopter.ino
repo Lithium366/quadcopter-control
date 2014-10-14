@@ -32,6 +32,7 @@ int dtime = 0; //Loop time
 int loopcount = 0; //Telemetry loop counter
 int armcounter = 0;
 bool armed = false;
+long counter = 0;
 
 Servo enginex1; //Top left engine
 Servo enginex2; //Top right engine
