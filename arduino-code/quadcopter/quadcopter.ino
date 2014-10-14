@@ -22,12 +22,12 @@ TinyGPS gps; //GPS data
 double anglex = 0; //Roll angle in degrees
 double angley = 0; //Pitch angle in degrees
 double anglez = 0; //Yaw angle in degrees relatively to the North
-double vybrox = 0;
-double vybroy = 0;
-double vybroz = 0;
-double vybroxsum = 0;
-double vybroysum = 0;
-double vybrozsum = 0;
+double vybrox[25];
+double vybroy[25];
+double vybroz[25];
+String vybroxsum;
+String vybroysum;
+String vybrozsum;
 int dtime = 0; //Loop time
 int loopcount = 0; //Telemetry loop counter
 int armcounter = 0;

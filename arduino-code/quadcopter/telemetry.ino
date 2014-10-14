@@ -3,24 +3,33 @@ void telemetry () {
   if (debug_mode) {
     loopcount++;
     
-    
-    if (loopcount == 1) {
+    if (loopcount == 25) {
+      vybroxsum = ":";
+      vybroysum = ":";
+      vybrozsum = ":";
+      for (int i = 0; i < loopcount; i++) {
+        char tmp[5];
+        dtostrf(vybrox[i] * 1000, 3, 0, tmp);
+        vybroxsum += ":";
+        vybroxsum += tmp;
+        dtostrf(vybroy[i] * 1000, 3, 0, tmp);
+        vybroysum += ":";
+        vybroysum += tmp;
+        dtostrf(vybroz[i] * 1000, 3, 0, tmp);
+        vybrozsum += ":";
+        vybrozsum += tmp;
+      }
+      Serial1.print("vybrox:");
+      Serial1.println(vybroxsum);
+      Serial1.print("vybroy:");
+      Serial1.println(vybroysum);
+      Serial1.print("vybroz:");
+      Serial1.println(vybrozsum);
       printRC();
-    } else if (loopcount == 4) {
-      vybroxsum = abs(vybrox / (16 / 2));
-      vybroysum = abs(vybroy / (16 / 2));
-      vybrozsum = abs(vybroz / (16 / 2));
-      vybrox = 0;
-      vybroy = 0;
-      vybroz = 0;
       printAngles();
-    } else if (loopcount == 7) {
       printPID();
-    } else if (loopcount == 10) {
       printSystem();
-    } else if (loopcount == 13) {
       Serial1.println("devider");
-    } else if (loopcount == 16) {
       loopcount = 0;
     }
   }
@@ -37,15 +46,15 @@ void printPID () {
     char pidZI_s[5];
     char pidZD_s[5];
     char total[50];
-    dtostrf(pidXP, 3, 1, pidXP_s);
-    dtostrf(pidXI, 3, 1, pidXI_s);
-    dtostrf(pidXD, 3, 1, pidXD_s);
-    dtostrf(pidYP, 3, 1, pidYP_s);
-    dtostrf(pidYI, 3, 1, pidYI_s);
-    dtostrf(pidYD, 3, 1, pidYD_s);
-    dtostrf(pidZP, 3, 1, pidZP_s);
-    dtostrf(pidZI, 3, 1, pidZI_s);
-    dtostrf(pidZD, 3, 1, pidZD_s);
+    dtostrf(pidXP, 1, 2, pidXP_s);
+    dtostrf(pidXI, 1, 2, pidXI_s);
+    dtostrf(pidXD, 1, 2, pidXD_s);
+    dtostrf(pidYP, 1, 2, pidYP_s);
+    dtostrf(pidYI, 1, 2, pidYI_s);
+    dtostrf(pidYD, 1, 2, pidYD_s);
+    dtostrf(pidZP, 1, 2, pidZP_s);
+    dtostrf(pidZI, 1, 2, pidZI_s);
+    dtostrf(pidZD, 1, 2, pidZD_s);
     sprintf(total, "pid:%s:%s:%s:%s:%s:%s:%s:%s:%s", pidXP_s, pidXI_s, pidXD_s, pidYP_s, pidYI_s, pidYD_s, pidZP_s, pidZI_s, pidZD_s);
     Serial1.println(total);
 }
@@ -54,17 +63,11 @@ void printAngles() {
     char anglex_s[10];
     char angley_s[10];
     char anglez_s[10];
-    char vybroxsum_s[10];
-    char vybroysum_s[10];
-    char vybrozsum_s[10];
-    char total[70];
-    dtostrf(anglex, 1, 3, anglex_s);
-    dtostrf(angley, 1, 3, angley_s);
-    dtostrf(anglez, 1, 3, anglez_s);
-    dtostrf(vybroxsum, 3, 3, vybroxsum_s);
-    dtostrf(vybroysum, 3, 3, vybroysum_s);
-    dtostrf(vybrozsum, 3, 3, vybrozsum_s);
-    sprintf(total, "angles:%s:%s:%s:%s:%s:%s", anglex_s, angley_s, anglez_s, vybroxsum_s, vybroysum_s, vybrozsum_s);
+    char total[70]
+    dtostrf(anglex, 1, 1, anglex_s);
+    dtostrf(angley, 1, 1, angley_s);
+    dtostrf(anglez, 1, 1, anglez_s);
+    sprintf(total, "angles:%s:%s:%s", anglex_s, angley_s, anglez_s);
     Serial1.println(total);
 }
 
