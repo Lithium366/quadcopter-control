@@ -5,7 +5,8 @@ var socket = io();
 $(function () {
 
     socket.on('sendFile', function(data){
-        dataAdapter(data);
+        var arrayOfData = dataAdapter(data);
+        drawVybros(arrayOfData);
     });
 
     function dataAdapter(data) {
@@ -53,29 +54,54 @@ $(function () {
             }
         }
 
-        console.log(arrayOfData);
+        return arrayOfData;
     }
 
-    var chart = new CanvasJS.Chart("accelContainer", {
+    function drawVybros(data) {
+        var chart = new CanvasJS.Chart("accelContainer", {
+            title: {
+                text: "Accelerometer data"
+            },
+            zoomEnabled: true,
+            data: [
+                {
+                    type: "line",
+                    showInLegend: true,
+                    name: "series1",
+                    legendText: "X",
+                    dataPoints: getDataPoints('vybrox')
+                },
+                {
+                    type: "line",
+                    showInLegend: true,
+                    name: "series3",
+                    legendText: "Y",
+                    dataPoints: getDataPoints('vybroy')
+                },
+                {
+                    type: "line",
+                    showInLegend: true,
+                    name: "series3",
+                    legendText: "Z",
+                    dataPoints: getDataPoints('vybroz')
+                }
+            ]
+        });
+        chart.render();
 
-        title:{
-            text: "Accelerometer data"
-        },
-        data: [
-            {
-                type: "line",
-                dataPoints: [
-                    { y: 1 },
-                    { y: 3 },
-                    { y: 2 },
-                    { y: 1.22 },
-                    { y: 7 }
-                ]
+        function getDataPoints(prop) {
+            var points = [];
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i][prop];
+                for (var j = 0; j < 25; j++) {
+                    points.push({
+                        y: parseInt(obj[j] || 0) / 1000
+                    });
+                }
             }
-        ]
-    });
-
-    chart.render();
+            return points;
+        }
+    }
 
     socket.emit('getFile');
 });
