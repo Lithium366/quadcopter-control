@@ -36,31 +36,34 @@ server.listen(3000, function() {
 
 var port = "/dev/tty.SLAB_USBtoUART";
 
+
 /*var sp = new SerialPort(port, {
-  baudrate: 57600,
-  parser: serialport.parsers.readline("\r\n")
+    baudrate: 57600,
+    parser: serialport.parsers.readline("\r\n")
 });
 
 sp.on('open', function () {
-  var jsobj = {};
-  var nowDate = new Date();
-  var logger = fs.createWriteStream('public/logs/log_' + ((nowDate.getMonth() < 9) ? '0' : '') + (nowDate.getMonth() + 1) +
-    '-' + ((nowDate.getDate() >= 10) ? '' : '0') + nowDate.getDate() +
-    '-' + nowDate.getFullYear() +
-    '-' + ((nowDate.getHours() >= 10) ? '' : '0') + nowDate.getHours() +
-    '-' + ((nowDate.getMinutes() >= 10) ? '' : '0') + nowDate.getMinutes() +
-    '-' + ((nowDate.getSeconds() >= 10) ? '' : '0') + nowDate.getSeconds() +
-    '.txt', {'flags': 'a'});
+    var jsobj = {};
+    var nowDate = new Date();
+    var logger = fs.createWriteStream('public/logs/log_' + ((nowDate.getMonth() < 9) ? '0' : '') + (nowDate.getMonth() + 1) +
+        '-' + ((nowDate.getDate() >= 10) ? '' : '0') + nowDate.getDate() +
+        '-' + nowDate.getFullYear() +
+        '-' + ((nowDate.getHours() >= 10) ? '' : '0') + nowDate.getHours() +
+        '-' + ((nowDate.getMinutes() >= 10) ? '' : '0') + nowDate.getMinutes() +
+        '-' + ((nowDate.getSeconds() >= 10) ? '' : '0') + nowDate.getSeconds() +
+        '.txt', {'flags': 'a'});
 
-  sp.on('data', function (data) {
-    logger.write(data + "\r\n");
-    var dataParsed = data.split(":");
-    if (dataParsed[0] === "devider") {
-      io.emit('dataUpdated', jsobj);
-      jsobj = {};
-    } else {
-      jsobj[dataParsed[0]] = dataParsed.splice(1, dataParsed.length);
-    }
-  });
+    sp.on('data', function (data) {
+        logger.write(data + "\r\n");
+        var dataParsed = data.split(":");
+        if (dataParsed[0] === "devider") {
+            io.emit('dataUpdated', jsobj);
+            jsobj = {};
+        } else {
+            jsobj[dataParsed[0]] = dataParsed.splice(1, dataParsed.length);
+        }
+    });
 });*/
+
+
 

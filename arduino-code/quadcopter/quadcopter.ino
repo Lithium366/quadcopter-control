@@ -82,6 +82,7 @@ void setup() {
 }
 
 void loop() {
+  setMode(); // Listen to a console commands
   readRC(); //Read data from RC
   getAngles(); //Read angles from sensors
   armDisarm(); //Arm/disarm
@@ -147,4 +148,35 @@ void computeErrorZ () {
     errorZ += 360;
   }
   // if wind will rotate to 180/-180 - Quad will crash  
+}
+
+void setMode () {
+  char mode;
+  if (Serial1.available() > 0) {
+    mode = Serial1.read();
+  }
+  switch (mode) {
+    case 'f':
+      telemetry_mode = "flight instruments";
+      break;
+    case 'x': // Send PID errors and desired angles on X
+      telemetry_mode = "pid tuning x";
+      break;
+    case 'y': // Send PID errors and desired angles on Y
+      telemetry_mode = "pid tuning y";
+      break;  
+    case 'z': // Send PID errors and desired angles on Z
+      telemetry_mode = "pid tuning z";
+      break;  
+    case 'v': // Send raw accelerometer data
+      telemetry_mode = "vibration levels";
+      break; 
+    case 'a': // Arm/Disarm from a console
+      if (ThrottleVal <= (minThrottle + 100)) {
+        armed = !armed;
+      }
+      break;
+    default:
+      break;
+  }
 }

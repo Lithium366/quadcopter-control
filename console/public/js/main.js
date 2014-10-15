@@ -30,6 +30,9 @@ $(function () {
         if (val.system) {
             $(window).trigger("systemUpdated", {values: val.system});
         }
+        if (val.angles) {
+            $(window).trigger("anglesUpdated", {values: val.angles});
+        }
         // Set online indicator to true every time new data came
         online = true;
         $(window).trigger("onlineUpdated", true);
