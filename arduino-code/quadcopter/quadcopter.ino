@@ -1,3 +1,4 @@
+#include <Adafruit_BMP085.h>
 #include <EEPROM.h>
 #include <Firmata.h>
 #include <Servo.h>
@@ -18,6 +19,7 @@ ADXL345 acc; //Accelerometer data
 L3G4200D gyro; //Gyro data
 HMC5883L compass; //Compass data
 TinyGPS gps; //GPS data
+Adafruit_BMP085 bmp; // Temperature / Pressure
 
 double anglex = 0; //Roll angle in degrees
 double angley = 0; //Pitch angle in degrees
@@ -31,6 +33,7 @@ double errorz[25];
 String vybroxsum;
 String vybroysum;
 String vybrozsum;
+double alt = 0;
 int dtime = 0; //Loop time
 int loopcount = 0; //Telemetry loop counter
 int armcounter = 0;
@@ -54,6 +57,7 @@ void setup() {
   Serial1.begin(57600); //3DR telemetry (always 57600)
   Serial.begin(57600); //USB serial
   initGps();
+  bmp.begin();
   acc.begin();
   acc.setRange(ADXL345::RANGE_2G);
   gyro.enableDefault();
@@ -86,12 +90,17 @@ void setup() {
 void loop() {
   setMode(); // Listen to a console commands
   readRC(); //Read data from RC
+  getAltitude();
   getAngles(); //Read angles from sensors
   armDisarm(); //Arm/disarm
   readGps(); //Read GPS sensor
   calculatePID();
   engineVelocities();
   telemetry();
+}
+
+void getAltitude () {
+  alt = bmp.readAltitude();
 }
 
 void calculatePID () {

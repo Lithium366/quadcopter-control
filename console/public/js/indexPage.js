@@ -33,6 +33,11 @@ $(function () {
     $(window).on("anglesUpdated", function (e, values) {
         $("#img1")[0].setAttribute("patternTransform", "rotate(" + values.values[0] + ", 100, 100) translate(0,"+ values.values[1] + ")");
         $("#compass_scale").css("transform", "rotate(" + values.values[2] + "deg)");
+        var feets = parseInt(parseFloat(values.values[3]) * 3.28084);
+        var feetsSm = Math.round(feets / 2.7778);
+        var feetsLg = Math.round(feets / 27.778);
+        $("#altSm").css("transform", "rotate(" + feetsSm + "deg)");
+        $("#altLg").css("transform", "rotate(" + feetsLg + "deg)");
     });
 
     var updateRCcontrols = function (values) {

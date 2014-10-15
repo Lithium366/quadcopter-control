@@ -105,11 +105,13 @@ void printAngles() {
     char anglex_s[10];
     char angley_s[10];
     char anglez_s[10];
-    char total[70];
+    char alt_s[10];
+    char total[80];
     dtostrf(anglex, 1, 1, anglex_s);
     dtostrf(angley, 1, 1, angley_s);
     dtostrf(anglez, 1, 1, anglez_s);
-    sprintf(total, "angles:%s:%s:%s", anglex_s, angley_s, anglez_s);
+    dtostrf(alt, 1, 1, alt_s);
+    sprintf(total, "angles:%s:%s:%s:%s", anglex_s, angley_s, anglez_s, alt_s);
     Serial1.println(total);
 }
 
