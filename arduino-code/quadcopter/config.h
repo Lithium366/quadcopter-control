@@ -52,4 +52,4 @@ float pidZI = 0;//0;
 float pidZD = 0.35;//1.2;
 
 float declinationAngle = 0.227;
-String telemetry_mode = "flight instruments";
+int telemetry_mode = 1; // flight instruments

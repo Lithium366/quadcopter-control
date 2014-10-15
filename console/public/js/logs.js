@@ -1,7 +1,3 @@
-var quadcopter = angular.module('quadcopter', []);
-
-var socket = io();
-
 $(function () {
 
     socket.on('sendFile', function(data){

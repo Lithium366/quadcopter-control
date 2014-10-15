@@ -25,6 +25,9 @@ double anglez = 0; //Yaw angle in degrees relatively to the North
 double vybrox[25];
 double vybroy[25];
 double vybroz[25];
+double errorx[25];
+double errory[25];
+double errorz[25];
 String vybroxsum;
 String vybroysum;
 String vybrozsum;
@@ -32,7 +35,6 @@ int dtime = 0; //Loop time
 int loopcount = 0; //Telemetry loop counter
 int armcounter = 0;
 bool armed = false;
-long counter = 0;
 
 Servo enginex1; //Top left engine
 Servo enginex2; //Top right engine
@@ -100,6 +102,9 @@ void calculatePID () {
     myPIDx.Compute();
     myPIDy.Compute();
     myPIDz.Compute();
+    errorx[loopcount] = SetpointX - anglex;
+    errory[loopcount] = SetpointY - angley;
+    errorz[loopcount] = SetpointZ - errorZ;
   }
 }
 
@@ -157,19 +162,13 @@ void setMode () {
   }
   switch (mode) {
     case 'f':
-      telemetry_mode = "flight instruments";
+      telemetry_mode = 1;
       break;
-    case 'x': // Send PID errors and desired angles on X
-      telemetry_mode = "pid tuning x";
+    case 'p': // Send PID and errors
+      telemetry_mode = 2;
       break;
-    case 'y': // Send PID errors and desired angles on Y
-      telemetry_mode = "pid tuning y";
-      break;  
-    case 'z': // Send PID errors and desired angles on Z
-      telemetry_mode = "pid tuning z";
-      break;  
     case 'v': // Send raw accelerometer data
-      telemetry_mode = "vibration levels";
+      telemetry_mode = 3;
       break; 
     case 'a': // Arm/Disarm from a console
       if (ThrottleVal <= (minThrottle + 100)) {

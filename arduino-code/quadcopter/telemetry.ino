@@ -3,36 +3,78 @@ void telemetry () {
   if (debug_mode) {
     loopcount++;
     
-    if (loopcount == 25) {
-      vybroxsum = "";
-      vybroysum = "";
-      vybrozsum = "";
-      for (int i = 0; i < loopcount; i++) {
-        char tmp[5];
-        dtostrf(vybrox[i] * 1000, 3, 0, tmp);
-        vybroxsum += ":";
-        vybroxsum += tmp;
-        dtostrf(vybroy[i] * 1000, 3, 0, tmp);
-        vybroysum += ":";
-        vybroysum += tmp;
-        dtostrf(vybroz[i] * 1000, 3, 0, tmp);
-        vybrozsum += ":";
-        vybrozsum += tmp;
+    if (telemetry_mode == 3) { // Accelerometer data (vibrations)
+      if (loopcount >= 25) {
+        printAccel();
+        loopcount = 0;
       }
-      Serial1.print("vybrox");
-      Serial1.println(vybroxsum);
-      Serial1.print("vybroy");
-      Serial1.println(vybroysum);
-      Serial1.print("vybroz");
-      Serial1.println(vybrozsum);
-      printRC();
-      printAngles();
-      printPID();
-      printSystem();
-      Serial1.println("devider");
-      loopcount = 0;
-    }
+    } else if (telemetry_mode == 2) { // PID data (error)
+      if (loopcount >= 25) {
+        printPID();
+        printError();
+        loopcount = 0;
+      }
+    } else {
+      // flight instruments
+      if (loopcount >= 7) {
+        printRC();
+        printAngles();
+        printSystem();
+        Serial1.println("devider");
+        loopcount = 0;
+      }
+    }        
   }
+}
+
+void printAccel() {
+  vybroxsum = "";
+  vybroysum = "";
+  vybrozsum = "";
+  for (int i = 0; i < loopcount; i++) {
+    char tmp[5];
+    dtostrf(vybrox[i] * 1000, 3, 0, tmp);
+    vybroxsum += ":";
+    vybroxsum += tmp;
+    dtostrf(vybroy[i] * 1000, 3, 0, tmp);
+    vybroysum += ":";
+    vybroysum += tmp;
+    dtostrf(vybroz[i] * 1000, 3, 0, tmp);
+    vybrozsum += ":";
+    vybrozsum += tmp;
+  }
+  Serial1.print("vybrox");
+  Serial1.println(vybroxsum);
+  Serial1.print("vybroy");
+  Serial1.println(vybroysum);
+  Serial1.print("vybroz");
+  Serial1.println(vybrozsum);
+  Serial1.println("devider");
+}
+
+void printError () {
+  vybroxsum = "";
+  vybroysum = "";
+  vybrozsum = "";
+  for (int i = 0; i < loopcount; i++) {
+    char tmp[5];
+    dtostrf(errorx[i] * 1000, 3, 0, tmp);
+    vybroxsum += ":";
+    vybroxsum += tmp;
+    dtostrf(errory[i] * 1000, 3, 0, tmp);
+    vybroysum += ":";
+    vybroysum += tmp;
+    dtostrf(errorz[i] * 1000, 3, 0, tmp);
+    vybrozsum += ":";
+    vybrozsum += tmp;
+  }
+  Serial1.print("errorx");
+  Serial1.println(vybroxsum);
+  Serial1.print("errory");
+  Serial1.println(vybroysum);
+  Serial1.print("errorz");
+  Serial1.println(vybrozsum);
+  Serial1.println("devider");
 }
 
 void printPID () {
@@ -78,12 +120,11 @@ void printRC() {
 }
 
 void printSystem() {
-  counter++;
   char total[40];
   char flat_s[15];
   char flon_s[15];
   dtostrf(flat, 3, 12, flat_s);
   dtostrf(flon, 3, 12, flon_s);
-  sprintf(total, "system:%d:%d:%s:%s:%d", dtime, counter, flat_s, flon_s, armed ? 1 : 0);
+  sprintf(total, "system:%d:%s:%s:%d", dtime, flat_s, flon_s, armed ? 1 : 0);
   Serial1.println(total);
 }

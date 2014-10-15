@@ -2,6 +2,7 @@ doctype html
 html
 	head
 		title Quadcopter console
+		link(rel="stylesheet", href="/css/bootstrap.css")
 		link(rel="stylesheet", href="/css/styles.css")
 		script(src="/js/libs/angular.min.js")
 		script(src="/js/libs/jquery-2.1.1.min.js")
@@ -13,4 +14,12 @@ html
 		script(src="/socket.io/socket.io.js")
 	body(ng-app='quadcopter')
 		div.main
+			nav(class='navbar navbar-default', role='navigation')
+				ul(class="nav navbar-nav")
+					li
+						a(href='/') Flight instruments
+					li
+						a(href='/pid') PID tuning
+					li
+						a(href='/accelerometer') Acceletometer data
 			block content
