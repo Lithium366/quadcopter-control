@@ -1,4 +1,3 @@
-#include <Adafruit_BMP085.h>
 #include <EEPROM.h>
 #include <Firmata.h>
 #include <Servo.h>
@@ -10,6 +9,7 @@
 #include <PID_v1.h>
 #include "config.h"
 #include <TinyGPS.h>
+#include <BMP085NB.h>
 
 // Values of RC stick controls
 int ThrottleVal, PitchVal, RollVal, YawVal, CH6Val, CH7Val, CH8Val;
@@ -19,7 +19,11 @@ ADXL345 acc; //Accelerometer data
 L3G4200D gyro; //Gyro data
 HMC5883L compass; //Compass data
 TinyGPS gps; //GPS data
-Adafruit_BMP085 bmp; // Temperature / Pressure
+BMP085NB bmp;
+
+int Temperature = 0;
+long Pressure = 0;
+float Altitude = 0;
 
 double anglex = 0; //Roll angle in degrees
 double angley = 0; //Pitch angle in degrees
@@ -33,7 +37,6 @@ double errorz[25];
 String vybroxsum;
 String vybroysum;
 String vybrozsum;
-double alt = 0;
 int dtime = 0; //Loop time
 int loopcount = 0; //Telemetry loop counter
 int armcounter = 0;
@@ -57,13 +60,14 @@ void setup() {
   Serial1.begin(57600); //3DR telemetry (always 57600)
   Serial.begin(57600); //USB serial
   initGps();
-  bmp.begin();
   acc.begin();
   acc.setRange(ADXL345::RANGE_2G);
   gyro.enableDefault();
   compass = HMC5883L();
   compass.SetScale(1.3);
   compass.SetMeasurementMode(Measurement_Continuous);
+  bmp.initialize();
+  bmp.setSeaLevelPressure(100600);
   SetpointX = 0;
   SetpointY = 0;
   SetpointZ = 0; //Must be always 0
@@ -85,6 +89,7 @@ void setup() {
   enginex4.attach(ENGINE4);
   enginex4.writeMicroseconds(0);
   delay(1000);
+
 }
 
 void loop() {
@@ -100,7 +105,7 @@ void loop() {
 }
 
 void getAltitude () {
-  alt = bmp.readAltitude();
+  bmp.pollData(&Temperature, &Pressure, &Altitude);  
 }
 
 void calculatePID () {

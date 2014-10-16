@@ -110,7 +110,7 @@ void printAngles() {
     dtostrf(anglex, 1, 1, anglex_s);
     dtostrf(angley, 1, 1, angley_s);
     dtostrf(anglez, 1, 1, anglez_s);
-    dtostrf(alt, 1, 1, alt_s);
+    dtostrf(Altitude, 1, 1, alt_s);
     sprintf(total, "angles:%s:%s:%s:%s", anglex_s, angley_s, anglez_s, alt_s);
     Serial1.println(total);
 }
