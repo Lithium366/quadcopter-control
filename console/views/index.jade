@@ -34,10 +34,11 @@ block content
 					.statusLight(class='{{online ? "green" : "red"}}')
 				#container-gps
 					.title GPS data
-					.statusLight.orange
+					.statusLight(class='{{gps ? "green" : "red"}}')
 				#container-arm
-					.title Arm/Disarm
-					.statusLight.green
+					.title
+						a(ng-click = 'armDisarm()') Arm/Disarm
+					.statusLight(class='{{arm ? "green" : "red"}}')
 		.gauges(ng-controller='anglesController')
 			.gaugesGroup
 				#container-speed.gaugeContainer

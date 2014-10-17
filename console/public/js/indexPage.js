@@ -1,8 +1,10 @@
 $(function () {
 
     // If no new data in 200ms - set online indicator to false
-    var online = false;
-    var map = false;
+    var online = false,
+        map = false,
+        copter = false,
+        me = false;
 
     function setOffline() {
         if (!online) {
@@ -24,18 +26,18 @@ $(function () {
             $(window).trigger("pidUpdated", {values: val.pid});
         }
         if (val.system) {
-            if (parseInt(val.system[1]) !== 1000 && parseInt(val.system[2]) !== 1000 && prevLat !== val.system[1] && prevLon !== val.system[2]) {
-                prevLat = val.system[1];
-                prevLon = val.system[2];
-                if (map) {
-                    map.panTo(new google.maps.LatLng(val.system[1], val.system[2]));
-                }
+            if (parseInt(val.system[1]) !== 1000 && parseInt(val.system[2]) !== 1000) {
+                $(window).trigger("gpsUpdated", true);
+                if (prevLat !== val.system[1] && prevLon !== val.system[2]) {
+                    prevLat = val.system[1];
+                    prevLon = val.system[2];
 
-                /*var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(val.system[1], val.system[2]),
-                    map: map
-                });
-                map.setCenter(marker.getPosition());*/
+                    if (copter) {
+                        copter.setPosition(new google.maps.LatLng(val.system[1], val.system[2]));
+                    }
+                }
+            } else {
+                $(window).trigger("gpsUpdated", false);
             }
             $(window).trigger("systemUpdated", {values: val.system});
         }
@@ -86,9 +88,23 @@ $(function () {
     function showPosition(position) {
         map = new google.maps.Map($('#container-gmap')[0], {
             center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            zoom: 18,
+            zoom: 17,
             mapTypeId: google.maps.MapTypeId.SATELLITE
         });
+
+        me = new google.maps.Marker({
+            position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            map: map,
+            title: "You",
+            icon: 'images/pilot.png'
+        });
+
+        copter = new google.maps.Marker({
+            map: map,
+            title: "Quadcopter",
+            icon: 'images/drone.png'
+        });
+
         map.setTilt(0);
     }
 

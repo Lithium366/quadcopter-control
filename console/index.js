@@ -72,15 +72,20 @@ sp.on('open', function () {
             choseMode(mode);
         }, 1000);
     }
-});
 
-/*** Socket.io listeners ***/
-io.on('connection', function (socket) {
+    /*** Socket.io listeners ***/
+    io.on('connection', function (socket) {
 
-    socket.on('getFile', function () {
-        var files = fs.readdirSync('public/logs');
-        var data = fs.readFileSync('public/logs/' + files[files.length - 1], 'utf8');
-        io.emit('sendFile', data);
+        socket.on('getFile', function () {
+            var files = fs.readdirSync('public/logs');
+            var data = fs.readFileSync('public/logs/' + files[files.length - 1], 'utf8');
+            io.emit('sendFile', data);
+        });
+
+        socket.on('armDisarm', function () {
+            sp.write("a");
+        });
+
     });
 
 });

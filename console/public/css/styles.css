@@ -172,9 +172,12 @@ h3 {
 }
 
 #container-gmap {
-    border: 1px solid #000;
     float: left;
-    height: 400px;
+    height: 515px;
     margin: 0 20px;
     width: 400px;
+}
+
+a {
+    cursor: pointer;
 }
