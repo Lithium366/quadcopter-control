@@ -181,3 +181,8 @@ h3 {
 a {
     cursor: pointer;
 }
+
+#altSm,
+#altLg {
+    transition: 0.5s linear;
+}

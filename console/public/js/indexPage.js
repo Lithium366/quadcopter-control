@@ -18,6 +18,7 @@ $(function () {
     // Once serial data available, notify observers
     var prevLat = 0;
     var prevLon = 0;
+    var tmot = null;
     $(window).on("dataUpdated", function (e, val) {
         if (val.reciever) {
             updateRCcontrols(val.reciever);
@@ -27,8 +28,14 @@ $(function () {
         }
         if (val.system) {
             if (parseInt(val.system[1]) !== 1000 && parseInt(val.system[2]) !== 1000) {
-                $(window).trigger("gpsUpdated", true);
                 if (prevLat !== val.system[1] && prevLon !== val.system[2]) {
+                    window.clearTimeout(tmot);
+                    tmot = window.setTimeout(function () {
+                        if (prevLat === val.system[1] && prevLon === val.system[2]) {
+                            $(window).trigger("gpsUpdated", false);
+                        }
+                    }, 5000);
+                    $(window).trigger("gpsUpdated", true);
                     prevLat = val.system[1];
                     prevLon = val.system[2];
 
@@ -36,8 +43,6 @@ $(function () {
                         copter.setPosition(new google.maps.LatLng(val.system[1], val.system[2]));
                     }
                 }
-            } else {
-                $(window).trigger("gpsUpdated", false);
             }
             $(window).trigger("systemUpdated", {values: val.system});
         }
@@ -49,14 +54,23 @@ $(function () {
         $(window).trigger("onlineUpdated", true);
     });
 
+    var counter = 0;
+    var feets = 0;
     $(window).on("anglesUpdated", function (e, values) {
         $("#img1")[0].setAttribute("patternTransform", "rotate(" + values.values[0] + ", 100, 100) translate(0,"+ values.values[1] + ")");
         $("#compass_scale").css("transform", "rotate(" + (-1 * values.values[2]) + "deg)");
-        var feets = parseInt(parseFloat(values.values[3]) * 3.28084);
-        var feetsSm = Math.round(feets / 2.7778);
-        var feetsLg = Math.round(feets / 27.778);
-        $("#altSm").css("transform", "rotate(" + feetsSm + "deg)");
-        $("#altLg").css("transform", "rotate(" + feetsLg + "deg)");
+        feets += parseInt(parseFloat(values.values[3]) * 3.28084);
+        counter++;
+        if (counter == 5) {
+            var feetsSm = Math.round(feets / 5 / 2.7778);
+            var feetsLg = Math.round(feets / 5 / 27.778);
+            $("#altSm").css("transform", "rotate(" + feetsSm + "deg)");
+            $("#altLg").css("transform", "rotate(" + feetsLg + "deg)");
+            counter = 0;
+            feets = 0;
+        }
+        var fps = parseInt(parseFloat(values.values[4]) * 3.28084);
+        $("#vspeed").css("transform", "rotate(" + (fps * 9 - 90) + "deg)");
     });
 
     var updateRCcontrols = function (values) {

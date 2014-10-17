@@ -24,6 +24,11 @@ BMP085NB bmp;
 int Temperature = 0;
 long Pressure = 0;
 float Altitude = 0;
+float prevAlts = 0;
+float vspeed = 0;
+int dtimes = 0;
+int counter = 0;
+float vspeeds = 0;
 
 double anglex = 0; //Roll angle in degrees
 double angley = 0; //Pitch angle in degrees
@@ -100,7 +105,23 @@ void loop() {
   readGps(); //Read GPS sensor
   calculatePID();
   engineVelocities();
+  getvspeed();
   telemetry();
+}
+
+void getvspeed () {
+  dtimes += dtime;
+  if (Altitude != prevAlts) {
+    counter++;
+    vspeeds += (Altitude - prevAlts) * 1000 / dtimes;
+    dtimes = 0;
+    if (counter == 10) {
+      vspeed = vspeeds / 10;
+      vspeeds = 0;
+      counter = 0;
+    }
+    prevAlts = Altitude;
+  }
 }
 
 void getAltitude () {

@@ -106,12 +106,14 @@ void printAngles() {
     char angley_s[10];
     char anglez_s[10];
     char alt_s[10];
-    char total[80];
+    char vspeed_s[10];
+    char total[90];
     dtostrf(anglex, 1, 1, anglex_s);
     dtostrf(angley, 1, 1, angley_s);
     dtostrf(anglez, 1, 1, anglez_s);
     dtostrf(Altitude, 1, 1, alt_s);
-    sprintf(total, "angles:%s:%s:%s:%s", anglex_s, angley_s, anglez_s, alt_s);
+    dtostrf(vspeed, 1, 1, vspeed_s);
+    sprintf(total, "angles:%s:%s:%s:%s:%s", anglex_s, angley_s, anglez_s, alt_s, vspeed_s);
     Serial1.println(total);
 }
 
@@ -122,7 +124,13 @@ void printRC() {
 }
 
 void printSystem() {
-  char total[30];
-  sprintf(total, "system:%d:%d:%d:%d", dtime, flat, flon, armed ? 1 : 0);
-  Serial.println(total);
+  Serial1.print("system:");
+  Serial1.print(":");
+  Serial1.print(dtime);
+  Serial1.print(":");
+  Serial1.print(flat, 10);
+  Serial1.print(":");
+  Serial1.print(flon, 10);
+  Serial1.print(":");
+  Serial1.println(armed ? 1 : 0);
 }
