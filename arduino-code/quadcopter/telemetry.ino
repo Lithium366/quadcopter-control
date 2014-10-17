@@ -4,12 +4,12 @@ void telemetry () {
     loopcount++;
     
     if (telemetry_mode == 3) { // Accelerometer data (vibrations)
-      if (loopcount >= 25) {
+      if (loopcount >= 10) {
         printAccel();
         loopcount = 0;
       }
     } else if (telemetry_mode == 2) { // PID data (error)
-      if (loopcount >= 25) {
+      if (loopcount >= 10) {
         printPID();
         printError();
         loopcount = 0;

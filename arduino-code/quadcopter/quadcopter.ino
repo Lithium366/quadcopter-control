@@ -33,12 +33,12 @@ float vspeeds = 0;
 double anglex = 0; //Roll angle in degrees
 double angley = 0; //Pitch angle in degrees
 double anglez = 0; //Yaw angle in degrees relatively to the North
-double vybrox[25];
-double vybroy[25];
-double vybroz[25];
-double errorx[25];
-double errory[25];
-double errorz[25];
+double vybrox[7];
+double vybroy[7];
+double vybroz[7];
+double errorx[7];
+double errory[7];
+double errorz[7];
 String vybroxsum;
 String vybroysum;
 String vybrozsum;

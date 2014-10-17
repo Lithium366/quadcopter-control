@@ -51,7 +51,7 @@ $(function () {
                x: valx,
                y: parseInt(data[i]) / 1000
            });
-            if (arr.length > 1001) {
+            if (arr.length >500) {
                 arr.shift();
             }
             valx++;
