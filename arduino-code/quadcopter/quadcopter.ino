@@ -20,7 +20,7 @@ L3G4200D gyro; //Gyro data
 HMC5883L compass; //Compass data
 TinyGPS gps; //GPS data
 BMP085NB bmp;
-
+      
 int Temperature = 0;
 long Pressure = 0;
 float Altitude = 0;
@@ -49,7 +49,7 @@ Servo enginex4; //Bottom right engine
 
 // GPS data
 float flat, flon;
-unsigned long age;
+  unsigned long age;
 
 double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ, deltaZ, errorZ; // PID setpoints and errors
 PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, REVERSE); //Roll PID
@@ -59,7 +59,7 @@ PID myPIDz(&errorZ, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT); //Yaw PI
 void setup() {
   Serial1.begin(57600); //3DR telemetry (always 57600)
   Serial.begin(57600); //USB serial
-  initGps();
+  Serial2.begin(9600); //init GPS
   acc.begin();
   acc.setRange(ADXL345::RANGE_2G);
   gyro.enableDefault();
@@ -89,7 +89,6 @@ void setup() {
   enginex4.attach(ENGINE4);
   enginex4.writeMicroseconds(0);
   delay(1000);
-
 }
 
 void loop() {

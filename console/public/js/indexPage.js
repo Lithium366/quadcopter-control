@@ -2,6 +2,8 @@ $(function () {
 
     // If no new data in 200ms - set online indicator to false
     var online = false;
+    var map = false;
+
     function setOffline() {
         if (!online) {
             $(window).trigger("onlineUpdated", false);
@@ -12,6 +14,8 @@ $(function () {
     setOffline();
 
     // Once serial data available, notify observers
+    var prevLat = 0;
+    var prevLon = 0;
     $(window).on("dataUpdated", function (e, val) {
         if (val.reciever) {
             updateRCcontrols(val.reciever);
@@ -20,6 +24,19 @@ $(function () {
             $(window).trigger("pidUpdated", {values: val.pid});
         }
         if (val.system) {
+            if (parseInt(val.system[1]) !== 1000 && parseInt(val.system[2]) !== 1000 && prevLat !== val.system[1] && prevLon !== val.system[2]) {
+                prevLat = val.system[1];
+                prevLon = val.system[2];
+                if (map) {
+                    map.panTo(new google.maps.LatLng(val.system[1], val.system[2]));
+                }
+
+                /*var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(val.system[1], val.system[2]),
+                    map: map
+                });
+                map.setCenter(marker.getPosition());*/
+            }
             $(window).trigger("systemUpdated", {values: val.system});
         }
         if (val.angles) {
@@ -60,6 +77,19 @@ $(function () {
         if (chart && values[2]) {
             chart.series[0].points[0].update(parseInt(values[2]));
         }
+    };
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+
+    function showPosition(position) {
+        map = new google.maps.Map($('#container-gmap')[0], {
+            center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            zoom: 18,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        });
+        map.setTilt(0);
     }
 
 });

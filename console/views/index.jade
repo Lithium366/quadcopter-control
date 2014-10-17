@@ -2,25 +2,8 @@ extends layout
 
 block content
 	.leftPanel
-		.rcControls
-			h3 RC signals
-			#container-throttle
-			#container-yaw
-			#container-pitch
-			#container-roll
-		.status.clearfix(ng-controller='Status')
-			h3 Status
-			#container-serial
-				.title Online
-				.statusLight(class='{{online ? "green" : "red"}}')
-			#container-gps
-				.title GPS data
-				.statusLight.orange
-			#container-arm
-				.title Arm/Disarm
-				.statusLight.green
 		.settings
-			h3 PID settings
+			//h3 PID settings
 				form(ng-controller='PidList')
 					.row(ng-repeat='(axe, pid) in pids')
 						h4 {{pid.name}} PID
@@ -37,6 +20,24 @@ block content
 				.system(ng-controller='systemController')
 					div Dtime: {{dtime}}
 	.rightPanel
+		.clearfix
+			.rcControls
+				h3 RC signals
+				#container-throttle
+				#container-yaw
+				#container-pitch
+				#container-roll
+			.status.clearfix(ng-controller='Status')
+				h3 Status
+				#container-serial
+					.title Online
+					.statusLight(class='{{online ? "green" : "red"}}')
+				#container-gps
+					.title GPS data
+					.statusLight.orange
+				#container-arm
+					.title Arm/Disarm
+					.statusLight.green
 		.gauges(ng-controller='anglesController')
 			.gaugesGroup
 				#container-speed.gaugeContainer
@@ -63,8 +64,8 @@ block content
 				#container-vspeed.gaugeContainer
 					img(src='/images/vert_speed.png', class='gauge')
 					img(src='/images/arrow_long.png', class='arrow big')
-		.map
-			#container-gmap
+	#container-gmap
+	script(type="text/javascript", src="//maps.googleapis.com/maps/api/js?key=AIzaSyCJ_c4ct-qADVjxDSFrRPilm0jfvYq9wvE")
 	script(src="/js/rc.js")
 	script(src="/js/main.js")
 	script(src="/js/indexPage.js")

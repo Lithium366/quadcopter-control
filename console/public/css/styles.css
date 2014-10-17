@@ -69,7 +69,7 @@ html {
 }
 
 .status {	
-	width: 320px;
+	width: 260px;
 }
 
 .status .statusLight {
@@ -161,3 +161,20 @@ h3 {
     left: 0;
 }
 
+.rcControls {
+    float: left;
+    margin-right: 20px;
+}
+
+.settings {
+    width: 100px;
+    margin-left: 20px;
+}
+
+#container-gmap {
+    border: 1px solid #000;
+    float: left;
+    height: 400px;
+    margin: 0 20px;
+    width: 400px;
+}

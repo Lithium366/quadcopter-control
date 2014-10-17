@@ -122,11 +122,7 @@ void printRC() {
 }
 
 void printSystem() {
-  char total[40];
-  char flat_s[15];
-  char flon_s[15];
-  dtostrf(flat, 3, 12, flat_s);
-  dtostrf(flon, 3, 12, flon_s);
-  sprintf(total, "system:%d:%s:%s:%d", dtime, flat_s, flon_s, armed ? 1 : 0);
-  Serial1.println(total);
+  char total[30];
+  sprintf(total, "system:%d:%d:%d:%d", dtime, flat, flon, armed ? 1 : 0);
+  Serial.println(total);
 }

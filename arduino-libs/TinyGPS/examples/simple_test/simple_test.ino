@@ -1,5 +1,3 @@
-#include <SoftwareSerial.h>
-
 #include <TinyGPS.h>
 
 /* This sample code demonstrates the normal use of a TinyGPS object.
@@ -8,12 +6,11 @@
 */
 
 TinyGPS gps;
-SoftwareSerial ss(4, 3);
 
 void setup()
 {
   Serial.begin(115200);
-  ss.begin(4800);
+  Serial2.begin(9600);
   
   Serial.print("Simple TinyGPS library v. "); Serial.println(TinyGPS::library_version());
   Serial.println("by Mikal Hart");
@@ -22,6 +19,7 @@ void setup()
 
 void loop()
 {
+  long int timer = millis();
   bool newData = false;
   unsigned long chars;
   unsigned short sentences, failed;
@@ -29,9 +27,9 @@ void loop()
   // For one second we parse GPS data and report some key values
   for (unsigned long start = millis(); millis() - start < 1000;)
   {
-    while (ss.available())
+    while (Serial2.available())
     {
-      char c = ss.read();
+      char c = Serial2.read();
       // Serial.write(c); // uncomment this line if you want to see the GPS data flowing
       if (gps.encode(c)) // Did a new valid sentence come in?
         newData = true;
@@ -60,6 +58,7 @@ void loop()
   Serial.print(sentences);
   Serial.print(" CSUM ERR=");
   Serial.println(failed);
+  Serial.println(millis() - timer);
   if (chars == 0)
     Serial.println("** No characters received from GPS: check wiring **");
 }
