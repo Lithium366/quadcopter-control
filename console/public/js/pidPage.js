@@ -8,6 +8,27 @@ quadcopter.controller('pidController', function ($scope) {
     $scope.currentAxe = $scope.axes[0];
     $scope.play = true;
 
+    $scope.pids = {
+        x : {
+            name : "Pitch",
+            p : 0,
+            i : 0,
+            d : 0
+        },
+        y: {
+            name : "Roll",
+            p : 0,
+            i : 0,
+            d : 0
+        },
+        z : {
+            name : "Yaw",
+            p : 0,
+            i : 0,
+            d : 0
+        }
+    };
+
     $scope.$watch('currentAxe', function() {
         prop = $scope.currentAxe.name;
     });

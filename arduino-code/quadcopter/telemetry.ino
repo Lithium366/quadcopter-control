@@ -10,10 +10,11 @@ void telemetry () {
       }
     } else if (telemetry_mode == 2) { // PID data (error)
       if (loopcount >= 7) {
-        //printPID();
         printError();
         loopcount = 0;
       }
+    } else if (telemetry_mode == 4) { // Send PID values
+      printPID();
     } else {
       // flight instruments
       if (loopcount >= 7) {

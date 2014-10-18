@@ -39,7 +39,7 @@ sp.on('open', function () {
 
     sp.on('data', function (data) {
         //logger.write(data + "\r\n");
-        console.log(data);
+        //console.log(data);
         var dataParsed = data.split(":");
         if (dataParsed[0] === "devider") {
             io.emit('dataUpdated', jsobj);

@@ -3,19 +3,6 @@ extends layout
 block content
 	.leftPanel
 		.settings
-			//h3 PID settings
-				form(ng-controller='PidList')
-					.row(ng-repeat='(axe, pid) in pids')
-						h4 {{pid.name}} PID
-						label(for='pid{{axe}}p') P
-						input(name='pid{{axe}}p', id='pid{{axe}}p', value='{{pid.p}}')
-						label(for='pid{{axe}}i') I
-						input(name='pid{{axe}}i', id='pid{{axe}}i', value='{{pid.i}}')
-						label(for='pid{{axe}}d') D
-						input(name='pidx{{axe}}d', id='pid{{axe}}d', value='{{pid.d}}')
-					.row
-						input(type='button', id='savePid', value='Save')
-						input(type='button', id='resetPid', value='Reset')
 			.system(ng-controller='systemController')
 				h3 System
 				div Dtime: {{dtime}}
@@ -77,7 +64,6 @@ block content
 	script(src="/js/rc.js")
 	script(src="/js/main.js")
 	script(src="/js/indexPage.js")
-	script(src="/js/pid.js")
 	script(src="/js/system.js")
 	script(src="/js/status.js")
 	script(src="/js/angles.js")

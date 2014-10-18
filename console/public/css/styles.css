@@ -45,16 +45,17 @@ html {
 .row {
 	max-width: 320px;
 	text-align: left;
+    margin:0;
+    font-size: 10px;
 }
 
-.row h4 {
-	font-weight: normal;
+.row h3 {
 	text-align: left;	
-	margin: 5px 0;
+	margin: 5px 0 5px;
 }
 
 .row input {
-	width: 80px;
+	width: 55px;
 	margin-right: 10px;
 }
 
@@ -216,4 +217,15 @@ a {
     position: relative;
     margin-top: -4px;
     margin-left: 20px;
+}
+
+.graps .left {
+    float: left;
+    width: 400px;
+    margin-left: 10px;
+    margin-top: 40px;
+}
+.graps .right {
+    float: left;
+    width: 800px;
 }
