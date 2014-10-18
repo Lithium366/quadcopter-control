@@ -16,9 +16,12 @@ block content
 					.row
 						input(type='button', id='savePid', value='Save')
 						input(type='button', id='resetPid', value='Reset')
-			h3 System
-				.system(ng-controller='systemController')
-					div Dtime: {{dtime}}
+			.system(ng-controller='systemController')
+				h3 System
+				div Dtime: {{dtime}}
+				.buttons
+					button.btn.btn-primary(ng-click = 'getWeather()', ng-disabled='!position') Obtain weather
+					button.btn.btn-primary(ng-click = 'armDisarm()') Arm/Disarm
 	.rightPanel
 		.clearfix
 			.rcControls
@@ -29,16 +32,20 @@ block content
 				#container-roll
 			.status.clearfix(ng-controller='Status')
 				h3 Status
-				#container-serial
-					.title Online
-					.statusLight(class='{{online ? "green" : "red"}}')
-				#container-gps
-					.title GPS data
-					.statusLight(class='{{gps ? "green" : "red"}}')
-				#container-arm
-					.title
-						a(ng-click = 'armDisarm()') Arm/Disarm
-					.statusLight(class='{{arm ? "green" : "red"}}')
+				.left
+					#container-serial
+						.title Online
+						.statusLight(class='{{online ? "green" : "red"}}')
+					#container-gps
+						.title GPS data
+						.statusLight(class='{{gps ? "green" : "red"}}')
+					#container-arm
+						.title Arm/Disarm
+						.statusLight(class='{{arm ? "green" : "red"}}')
+				.right
+					#container-weather
+						.title Weather
+						.statusLight(class='{{weather ? "green" : "red"}}')
 		.gauges(ng-controller='anglesController')
 			.gaugesGroup
 				#container-speed.gaugeContainer

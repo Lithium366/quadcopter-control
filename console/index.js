@@ -39,6 +39,7 @@ sp.on('open', function () {
 
     sp.on('data', function (data) {
         //logger.write(data + "\r\n");
+        console.log(data);
         var dataParsed = data.split(":");
         if (dataParsed[0] === "devider") {
             io.emit('dataUpdated', jsobj);
@@ -85,6 +86,10 @@ sp.on('open', function () {
         socket.on('armDisarm', function () {
             sp.write("a");
         });
+
+        socket.on('weatherObtained', function (val) {
+            sp.write("w" + val);
+        })
 
     });
 

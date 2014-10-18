@@ -9,8 +9,8 @@ void telemetry () {
         loopcount = 0;
       }
     } else if (telemetry_mode == 2) { // PID data (error)
-      if (loopcount >= 10) {
-        printPID();
+      if (loopcount >= 7) {
+        //printPID();
         printError();
         loopcount = 0;
       }
@@ -58,13 +58,13 @@ void printError () {
   vybrozsum = "";
   for (int i = 0; i < loopcount; i++) {
     char tmp[5];
-    dtostrf(errorx[i] * 1000, 3, 0, tmp);
+    dtostrf(errorx[i] * 100, 5, 0, tmp);
     vybroxsum += ":";
     vybroxsum += tmp;
-    dtostrf(errory[i] * 1000, 3, 0, tmp);
+    dtostrf(errory[i] * 100, 5, 0, tmp);
     vybroysum += ":";
     vybroysum += tmp;
-    dtostrf(errorz[i] * 1000, 3, 0, tmp);
+    dtostrf(errorz[i] * 100, 5, 0, tmp);
     vybrozsum += ":";
     vybrozsum += tmp;
   }
@@ -124,18 +124,18 @@ void printRC() {
 }
 
 void printSystem() {
-  unsigned int tmr = millis();
+  //unsigned int tmr = millis();
   
-  char total[50];
+  /*char total[50];
   char flat_s[15];
   char flon_s[15];
   dtostrf(flat, 15, 10, flat_s);
   dtostrf(flon, 15, 10, flon_s);
   sprintf(total, "system:%d:%s:%s:%d", dtime, flat_s, flon_s, armed ? 1 : 0);
-  Serial1.println(total);
+  Serial1.println(total);*/
   
   
-  /*Serial1.print("system:");
+  Serial1.print("system:");
   Serial1.print(":");
   Serial1.print(dtime);
   Serial1.print(":");
@@ -143,7 +143,7 @@ void printSystem() {
   Serial1.print(":");
   Serial1.print(flon, 10);
   Serial1.print(":");  
-  Serial1.println(armed ? 1 : 0);*/
+  Serial1.println(armed ? 1 : 0);
   
-  Serial.println(millis() - tmr);
+  //Serial.println(millis() - tmr);
 }

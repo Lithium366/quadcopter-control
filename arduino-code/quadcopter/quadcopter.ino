@@ -72,7 +72,6 @@ void setup() {
   compass.SetScale(1.3);
   compass.SetMeasurementMode(Measurement_Continuous);
   bmp.initialize();
-  bmp.setSeaLevelPressure(100600);
   SetpointX = 0;
   SetpointY = 0;
   SetpointZ = 0; //Must be always 0
@@ -113,12 +112,12 @@ void getvspeed () {
   dtimes += dtime;
   if (Altitude != prevAlts) {
     counter++;
-    if (counter <= 20) {
+    if (counter <= 50) {
       prevAlts += Altitude;
-    } else if (counter > 20) {
+    } else if (counter > 50) {
       Alts +=Altitude;
-      if (counter == 40) {
-        vspeed = ((Alts - prevAlts) / 20) * 1000 / dtimes;
+      if (counter == 100) {
+        vspeed = ((Alts - prevAlts) / 50) * 1000 / dtimes;
         prevAlts = 0;
         Alts = 0;
         counter = 0;
@@ -140,10 +139,10 @@ void calculatePID () {
     myPIDx.Compute();
     myPIDy.Compute();
     myPIDz.Compute();
-    errorx[loopcount] = SetpointX - anglex;
-    errory[loopcount] = SetpointY - angley;
-    errorz[loopcount] = SetpointZ - errorZ;
   }
+  errorx[loopcount] = SetpointX - anglex;
+  errory[loopcount] = SetpointY - angley;
+  errorz[loopcount] = SetpointZ - errorZ;
 }
 
 void engineVelocities () {
@@ -194,11 +193,16 @@ void computeErrorZ () {
 }
 
 void setMode () {
-  char mode;
+  unsigned long tmr = millis();
+  String mode;
   if (Serial1.available() > 0) {
-    mode = Serial1.read();
-  }
-  switch (mode) {
+    while (Serial1.available())    
+      mode += (char)Serial1.read();
+  }  
+  
+  long pres = 0;
+  
+  switch (mode.charAt(0)) {
     case 'f':
       telemetry_mode = 1;
       break;
@@ -211,6 +215,12 @@ void setMode () {
     case 'a': // Arm/Disarm from a console
       if (ThrottleVal <= (minThrottle + 100)) {
         armed = !armed;
+      }
+      break;
+    case 'w':
+      pres = mode.substring(1, mode.length()).toInt();
+      if (pres > 80000) {
+        bmp.setSeaLevelPressure(pres);
       }
       break;
     default:

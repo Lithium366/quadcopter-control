@@ -18,7 +18,10 @@ quadcopter.controller('Status', function ($scope) {
         $scope.$apply();
     });
 
-    $scope.armDisarm = function () {
-        socket.emit("armDisarm");
-    }
+    $(window).on("weatherObtained", function (e, val) {
+      $scope.weather = true;
+      $scope.$apply();
+      if (parseInt(val))
+        socket.emit("weatherObtained", parseInt(val * 100));
+    })
 });

@@ -1,21 +1,28 @@
-$(function () {
-    var valx = 0;
-    var vybro = makeArr();
+quadcopter.controller('vybroController', function ($scope) {
+    $scope.axes = [
+        {name:'x'},
+        {name:'y'},
+        {name:'z'}
+    ];
 
-    function makeArr() {
-        var arrk = [];
-        for (var i = 0; i < valx - 1; i++) {
-            arrk.push({
-                x: i,
-                y: 0
-            });
-        }
-        return [];
-    }
+    $scope.currentAxe = $scope.axes[0];
+    $scope.play = true;
+
+    $scope.$watch('currentAxe', function() {
+        prop = $scope.currentAxe.name;
+    });
+
+    $scope.togglePlay = function () {
+        $scope.play = !$scope.play;
+    };
+
+    var val = 0;
+    var vybro = [];
+    var prop = $scope.currentAxe.name;
 
     $(window).on("dataUpdated", function (e, val) {
-        if (accel) {
-            conv(vybro, val.vybrox);
+        if (accel && $scope.play) {
+            conv(vybro, val["vybro" + prop]);
             accel.render();
         }
     });
@@ -35,8 +42,7 @@ $(function () {
             {
                 type: "line",
                 showInLegend: true,
-                name: "series1",
-                legendText: "X",
+                name: "Accelerometer data in G",
                 dataPoints: vybro
             }
         ]
@@ -47,14 +53,14 @@ $(function () {
         if (!data) return;
 
         for (var i = 0; i < data.length; i++) {
-           arr.push({
-               x: valx,
-               y: parseInt(data[i]) / 1000
-           });
-            if (arr.length >500) {
+            arr.push({
+                x: val,
+                y: parseInt(data[i]) / 1000
+            });
+            if (arr.length > 2000) {
                 arr.shift();
             }
-            valx++;
+            val++;
         }
 
     }

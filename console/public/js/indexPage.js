@@ -101,17 +101,7 @@ $(function () {
 
     function showPosition(position) {
 
-        // Obtain pressure information if possible
-        $.getJSON("//api.openweathermap.org/data/2.5/weather", {
-            lat: data.coords.latitude,
-            lon: data.coords.longitude
-        }, function (resp) {
-            try {
-                console.log("Pressure:" + resp.main.pressure);
-            } catch (e) {
-                console.log("No pressure information");
-            }
-        });
+        $(window).trigger("positionUpdated", position);
 
         map = new google.maps.Map($('#container-gmap')[0], {
             center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
