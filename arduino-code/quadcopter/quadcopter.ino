@@ -25,10 +25,10 @@ int Temperature = 0;
 long Pressure = 0;
 float Altitude = 0;
 float prevAlts = 0;
+float Alts = 0;
 float vspeed = 0;
 int dtimes = 0;
 int counter = 0;
-float vspeeds = 0;
 
 double anglex = 0; //Roll angle in degrees
 double angley = 0; //Pitch angle in degrees
@@ -113,14 +113,18 @@ void getvspeed () {
   dtimes += dtime;
   if (Altitude != prevAlts) {
     counter++;
-    vspeeds += (Altitude - prevAlts) * 1000 / dtimes;
-    dtimes = 0;
-    if (counter == 10) {
-      vspeed = vspeeds / 10;
-      vspeeds = 0;
-      counter = 0;
-    }
-    prevAlts = Altitude;
+    if (counter <= 20) {
+      prevAlts += Altitude;
+    } else if (counter > 20) {
+      Alts +=Altitude;
+      if (counter == 40) {
+        vspeed = ((Alts - prevAlts) / 20) * 1000 / dtimes;
+        prevAlts = 0;
+        Alts = 0;
+        counter = 0;
+        dtimes = 0;
+      }
+    } 
   }
 }
 

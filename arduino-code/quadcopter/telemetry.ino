@@ -4,7 +4,7 @@ void telemetry () {
     loopcount++;
     
     if (telemetry_mode == 3) { // Accelerometer data (vibrations)
-      if (loopcount >= 10) {
+      if (loopcount >= 7) {
         printAccel();
         loopcount = 0;
       }
@@ -124,13 +124,26 @@ void printRC() {
 }
 
 void printSystem() {
-  Serial1.print("system:");
+  unsigned int tmr = millis();
+  
+  char total[50];
+  char flat_s[15];
+  char flon_s[15];
+  dtostrf(flat, 15, 10, flat_s);
+  dtostrf(flon, 15, 10, flon_s);
+  sprintf(total, "system:%d:%s:%s:%d", dtime, flat_s, flon_s, armed ? 1 : 0);
+  Serial1.println(total);
+  
+  
+  /*Serial1.print("system:");
   Serial1.print(":");
   Serial1.print(dtime);
   Serial1.print(":");
   Serial1.print(flat, 10);
   Serial1.print(":");
   Serial1.print(flon, 10);
-  Serial1.print(":");
-  Serial1.println(armed ? 1 : 0);
+  Serial1.print(":");  
+  Serial1.println(armed ? 1 : 0);*/
+  
+  Serial.println(millis() - tmr);
 }
