@@ -2,7 +2,6 @@ void telemetry () {
   //Telemetry info
   if (debug_mode) {
     loopcount++;
-    
     if (telemetry_mode == 3) { // Accelerometer data (vibrations)
       if (loopcount >= 7) {
         printAccel();
@@ -13,8 +12,12 @@ void telemetry () {
         printError();
         loopcount = 0;
       }
-    } else if (telemetry_mode == 4) { // Send PID values
-      printPID();
+    } else if (telemetry_mode == 4) { // Send PID values 
+      if (loopcount >= 7) {
+        printPID();
+        Serial1.println("devider");
+        loopcount = 0;
+      }
     } else {
       // flight instruments
       if (loopcount >= 7) {

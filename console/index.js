@@ -39,7 +39,6 @@ sp.on('open', function () {
 
     sp.on('data', function (data) {
         //logger.write(data + "\r\n");
-        //console.log(data);
         var dataParsed = data.split(":");
         if (dataParsed[0] === "devider") {
             io.emit('dataUpdated', jsobj);
@@ -89,7 +88,14 @@ sp.on('open', function () {
 
         socket.on('weatherObtained', function (val) {
             sp.write("w" + val);
-        })
+        });
+
+        socket.on('getPid', function () {
+            choseMode("t");
+            setTimeout(function () {
+                choseMode("p");
+            }, 1500);
+        });
 
     });
 

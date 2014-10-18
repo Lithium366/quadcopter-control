@@ -212,7 +212,7 @@ void setMode () {
     case 'v': // Send raw accelerometer data
       telemetry_mode = 3;
       break; 
-    case 't'
+    case 't':
       telemetry_mode = 4;
       break;
     case 'a': // Arm/Disarm from a console

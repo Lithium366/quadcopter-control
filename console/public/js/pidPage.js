@@ -37,12 +37,34 @@ quadcopter.controller('pidController', function ($scope) {
         $scope.play = !$scope.play;
     };
 
+    $scope.getPid = function () {
+        socket.emit("getPid");
+    };
+
+    $scope.setPid = function () {
+
+    };
+
     var val = 0;
     var error = [];
     var prop = $scope.currentAxe.name;
 
     $(window).on("dataUpdated", function (e, val) {
-        if (accel && $scope.play) {
+        if (val.pid) {
+            var values = val.pid;
+            if (values.length === 9) {
+                $scope.pids.x.p = values[0];
+                $scope.pids.x.i = values[1];
+                $scope.pids.x.d = values[2];
+                $scope.pids.y.p = values[3];
+                $scope.pids.y.i = values[4];
+                $scope.pids.y.d = values[5];
+                $scope.pids.z.p = values[6];
+                $scope.pids.z.i = values[7];
+                $scope.pids.z.d = values[8];
+                $scope.$apply();
+            }
+        } else if (accel && $scope.play) {
             conv(error, val["error" + prop]);
             accel.render();
         }
@@ -84,4 +106,5 @@ quadcopter.controller('pidController', function ($scope) {
         }
 
     }
+
 });
