@@ -229,3 +229,8 @@ a {
     float: left;
     width: 900px;
 }
+
+#vspeed {
+    transition-duration: 1s;
+    transition-timing-function: linear;
+}

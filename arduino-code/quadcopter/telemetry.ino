@@ -140,7 +140,6 @@ void printSystem() {
   
   
   Serial1.print("system:");
-  Serial1.print(":");
   Serial1.print(dtime);
   Serial1.print(":");
   Serial1.print(flat, 10);
