@@ -37,7 +37,8 @@ double yawCorrection = 0;
 int minEngineRPM = 700;
 
 //Roll
-float pidXP = 6;//2.2;//7;//3;//0.9;
+
+/*float pidXP = 6;//2.2;//7;//3;//0.9;
 float pidXI = 1;//2;//0.2;
 float pidXD = 0.85;//0.65;//0.95;//0.71;//0.85;
 
@@ -49,7 +50,10 @@ float pidYD = 0.95;//0.9;//0.71;//3;//0.85;
 //Yaw
 float pidZP = 3;//10;
 float pidZI = 0;//0;
-float pidZD = 0.35;//1.2;
+float pidZD = 0.35;//1.2;*/
+
+
+float pidXP, pidXI, pidXD, pidYP, pidYI, pidYD, pidZP, pidZI, pidZD;
 
 float declinationAngle = 0.227;
 int telemetry_mode = 1; // flight instruments

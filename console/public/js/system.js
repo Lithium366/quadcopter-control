@@ -15,6 +15,10 @@ quadcopter.controller('systemController', function ($scope) {
         socket.emit("armDisarm");
     };
 
+    $scope.setLevel = function () {
+        socket.emit("setLevel");
+    };
+
     $(window).on("obtainWeather", function (e) {
         $.getJSON("//api.openweathermap.org/data/2.5/weather", {
             lat: $scope.position.coords.latitude,

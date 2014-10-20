@@ -7,6 +7,7 @@ quadcopter.controller('pidController', function ($scope) {
 
     $scope.currentAxe = $scope.axes[0];
     $scope.play = true;
+    $scope.savedPid = true;
 
     $scope.pids = {
         x : {
@@ -42,8 +43,30 @@ quadcopter.controller('pidController', function ($scope) {
     };
 
     $scope.setPid = function () {
-
+        var arr = [
+            parseInt($scope.pids.x.p * 1000) || 0,
+            parseInt($scope.pids.x.i * 1000) || 0,
+            parseInt($scope.pids.x.d * 1000) || 0,
+            parseInt($scope.pids.y.p * 1000) || 0,
+            parseInt($scope.pids.y.i * 1000) || 0,
+            parseInt($scope.pids.y.d * 1000) || 0,
+            parseInt($scope.pids.z.p * 1000) || 0,
+            parseInt($scope.pids.z.i * 1000) || 0,
+            parseInt($scope.pids.z.d * 1000) || 0
+        ];
+        var chksumm = 0;
+        for (var i = 0; i < arr.length; i++) {
+            chksumm += arr[i]
+        }
+        arr.push(chksumm);
+        $scope.savedPid = false;
+        socket.emit("setPid", arr.join(":"));
     };
+
+    socket.on("pidSaved", function () {
+        $scope.savedPid = true;
+        $scope.$apply();
+    });
 
     var val = 0;
     var error = [];
@@ -51,17 +74,18 @@ quadcopter.controller('pidController', function ($scope) {
 
     $(window).on("dataUpdated", function (e, val) {
         if (val.pid) {
+            console.log(val);
             var values = val.pid;
             if (values.length === 9) {
-                $scope.pids.x.p = values[0];
-                $scope.pids.x.i = values[1];
-                $scope.pids.x.d = values[2];
-                $scope.pids.y.p = values[3];
-                $scope.pids.y.i = values[4];
-                $scope.pids.y.d = values[5];
-                $scope.pids.z.p = values[6];
-                $scope.pids.z.i = values[7];
-                $scope.pids.z.d = values[8];
+                $scope.pids.x.p = parseFloat(values[0]).toFixed(3);
+                $scope.pids.x.i = parseFloat(values[1]).toFixed(3);
+                $scope.pids.x.d = parseFloat(values[2]).toFixed(3);
+                $scope.pids.y.p = parseFloat(values[3]).toFixed(3);
+                $scope.pids.y.i = parseFloat(values[4]).toFixed(3);
+                $scope.pids.y.d = parseFloat(values[5]).toFixed(3);
+                $scope.pids.z.p = parseFloat(values[6]).toFixed(3);
+                $scope.pids.z.i = parseFloat(values[7]).toFixed(3);
+                $scope.pids.z.d = parseFloat(values[8]).toFixed(3);
                 $scope.$apply();
             }
         } else if (accel && $scope.play) {

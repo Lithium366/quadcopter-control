@@ -8,14 +8,14 @@ block content
 				.row(ng-repeat='(axe, pid) in pids')
 					h3 {{pid.name}} PID
 					label(for='pid{{axe}}p') P
-					input(name='pid{{axe}}p', id='pid{{axe}}p', value='{{pid.p}}')
+					input(name='pid{{axe}}p', id='pid{{axe}}p', ng-model='pid.p')
 					label(for='pid{{axe}}i') I
-					input(name='pid{{axe}}i', id='pid{{axe}}i', value='{{pid.i}}')
+					input(name='pid{{axe}}i', id='pid{{axe}}i',  ng-model='pid.i')
 					label(for='pid{{axe}}d') D
-					input(name='pidx{{axe}}d', id='pid{{axe}}d', value='{{pid.d}}')
+					input(name='pidx{{axe}}d', id='pid{{axe}}d', ng-model='pid.d')
 				.row
-					button.btn.btn-primary.btn-sm(ng-click='getPid()', id='getPid') Get
-					button.btn.btn-primary.btn-sm(ng-click='setPid()', id='savePid') Save
+					button.btn.btn-primary.btn-sm(ng-click='getPid()', id='getPid', ng-disabled='!savedPid') Get
+					button.btn.btn-primary.btn-sm(ng-click='setPid()', id='savePid', ng-disabled='!savedPid') Save
 		.right
 			select(ng-model="currentAxe", ng-options="axe.name for axe in axes")
 			button.btn.btn-primary.btn-sm(ng-click="togglePlay()") {{play ? "Pause" : "Play"}}

@@ -24,6 +24,11 @@ float getCompassData()
   return headingDegrees;
 }
 
+void setLevel() {
+  pitchCorrection = -angley;
+  rollCorrection = -anglex; 
+}
+
 void getAngles()
 {
   double pitch, roll, yaw, Xg, Yg, Zg;

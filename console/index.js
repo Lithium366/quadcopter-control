@@ -29,6 +29,8 @@ sp.on('open', function () {
     var tmot = null;
     var jsobj = {};
     var nowDate = new Date();
+    var changeMode = true;
+
     /*var logger = fs.createWriteStream('public/logs/log_' + ((nowDate.getMonth() < 9) ? '0' : '') + (nowDate.getMonth() + 1) +
         '-' + ((nowDate.getDate() >= 10) ? '' : '0') + nowDate.getDate() +
         '-' + nowDate.getFullYear() +
@@ -39,6 +41,10 @@ sp.on('open', function () {
 
     sp.on('data', function (data) {
         //logger.write(data + "\r\n");
+
+        if (data === 'pidsaved') {
+          changeMode = true;
+        }
         var dataParsed = data.split(":");
         if (dataParsed[0] === "devider") {
             io.emit('dataUpdated', jsobj);
@@ -86,6 +92,15 @@ sp.on('open', function () {
             sp.write("a");
         });
 
+        socket.on('setLevel', function () {
+            sp.write("l");
+        });
+
+        socket.on('setPid', function (val) {
+            changeMode = false;
+            savePid(val);
+        });
+
         socket.on('weatherObtained', function (val) {
             sp.write("w" + val);
         });
@@ -96,6 +111,17 @@ sp.on('open', function () {
                 choseMode("p");
             }, 1500);
         });
+
+        function savePid (val) {
+            if (!changeMode) {
+                setTimeout(function () {
+                    sp.write("s" + val);
+                    savePid(val);
+                }, 200);
+            } else {
+                io.emit('pidSaved');
+            }
+        }
 
     });
 

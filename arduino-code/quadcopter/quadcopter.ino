@@ -84,6 +84,8 @@ void setup() {
   myPIDz.SetMode(AUTOMATIC);
   myPIDz.SetSampleTime(6);
   myPIDz.SetOutputLimits(-200, 200);
+  getPid();
+  updatePid();
   enginex1.attach(ENGINE1);
   enginex1.writeMicroseconds(0);
   enginex2.attach(ENGINE2);
@@ -192,6 +194,53 @@ void computeErrorZ () {
   // if wind will rotate to 180/-180 - Quad will crash  
 }
 
+void setPid(String pidr) {
+  int sepPosition;
+  long pids[10];
+  int cnt = 0;
+  long chksumm = 0;
+  int startingAddress = 1;
+  do {
+    sepPosition = pidr.indexOf(':');
+    int wd;
+    if(sepPosition != -1) {
+        pids[cnt] = pidr.substring(0, sepPosition).toInt();
+        chksumm += pids[cnt];
+        pidr = pidr.substring(sepPosition + 1, pidr.length());
+        cnt++;
+    } else {
+        pids[cnt] = pidr.toInt();
+    }
+  } while(sepPosition >= 0);
+  if (chksumm == pids[9]) {
+    for (int i = 0; i < 9; i++) {
+      EEPROMWritelong(startingAddress + 4*i, pids[i]);
+    }
+    Serial1.println("pidsaved");
+    getPid();
+    updatePid();
+  } 
+}
+
+void updatePid() {
+  myPIDx.SetTunings(pidXP, pidXI, pidXD);
+  myPIDy.SetTunings(pidYP, pidYI, pidYD);
+  myPIDz.SetTunings(pidZP, pidZI, pidZD);
+}
+
+void getPid () {
+  int startingAddress = 1;
+  pidXP = (float) EEPROMReadlong(startingAddress + 4*startingAddress*0) / 1000;
+  pidXI = (float) EEPROMReadlong(startingAddress + 4*startingAddress*1) / 1000;
+  pidXD = (float) EEPROMReadlong(startingAddress + 4*startingAddress*2) / 1000;
+  pidYP = (float) EEPROMReadlong(startingAddress + 4*startingAddress*3) / 1000;
+  pidYI = (float) EEPROMReadlong(startingAddress + 4*startingAddress*4) / 1000;
+  pidYD = (float) EEPROMReadlong(startingAddress + 4*startingAddress*5) / 1000;
+  pidZP = (float) EEPROMReadlong(startingAddress + 4*startingAddress*6) / 1000;
+  pidZI = (float) EEPROMReadlong(startingAddress + 4*startingAddress*7) / 1000;
+  pidZD = (float) EEPROMReadlong(startingAddress + 4*startingAddress*8) / 1000;
+}
+
 void setMode () {
   unsigned long tmr = millis();
   String mode;
@@ -201,6 +250,7 @@ void setMode () {
   }  
   
   long pres = 0;
+  String pidr = ""; 
   
   switch (mode.charAt(0)) {
     case 'f':
@@ -214,6 +264,13 @@ void setMode () {
       break; 
     case 't':
       telemetry_mode = 4;
+      break;
+    case 'l':
+      setLevel();
+      break;
+    case 's':
+      pidr = mode.substring(1, mode.length());
+      setPid(pidr);
       break;
     case 'a': // Arm/Disarm from a console
       if (ThrottleVal <= (minThrottle + 100)) {
@@ -229,4 +286,30 @@ void setMode () {
     default:
       break;
   }
+}
+
+void EEPROMWritelong(int address, long value) {
+  //Decomposition from a long to 4 bytes by using bitshift.
+  //One = Most significant -> Four = Least significant byte
+  byte four = (value & 0xFF);
+  byte three = ((value >> 8) & 0xFF);
+  byte two = ((value >> 16) & 0xFF);
+  byte one = ((value >> 24) & 0xFF);
+  
+  //Write the 4 bytes into the eeprom memory.
+  EEPROM.write(address, four);
+  EEPROM.write(address + 1, three);
+  EEPROM.write(address + 2, two);
+  EEPROM.write(address + 3, one);
+}
+
+long EEPROMReadlong(long address){
+  //Read the 4 bytes from the eeprom memory.
+  long four = EEPROM.read(address);
+  long three = EEPROM.read(address + 1);
+  long two = EEPROM.read(address + 2);
+  long one = EEPROM.read(address + 3);
+
+  //Return the recomposed long by using bitshift.
+  return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
 }

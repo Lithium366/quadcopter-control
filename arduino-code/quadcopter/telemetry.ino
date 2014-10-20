@@ -82,25 +82,25 @@ void printError () {
 }
 
 void printPID () {
-    char pidXP_s[5];
-    char pidXI_s[5];
-    char pidXD_s[5];
-    char pidYP_s[5];
-    char pidYI_s[5];
-    char pidYD_s[5];
-    char pidZP_s[5];
-    char pidZI_s[5];
-    char pidZD_s[5];
-    char total[50];
-    dtostrf(pidXP, 1, 2, pidXP_s);
-    dtostrf(pidXI, 1, 2, pidXI_s);
-    dtostrf(pidXD, 1, 2, pidXD_s);
-    dtostrf(pidYP, 1, 2, pidYP_s);
-    dtostrf(pidYI, 1, 2, pidYI_s);
-    dtostrf(pidYD, 1, 2, pidYD_s);
-    dtostrf(pidZP, 1, 2, pidZP_s);
-    dtostrf(pidZI, 1, 2, pidZI_s);
-    dtostrf(pidZD, 1, 2, pidZD_s);
+    char pidXP_s[8];
+    char pidXI_s[8];
+    char pidXD_s[8];
+    char pidYP_s[8];
+    char pidYI_s[8];
+    char pidYD_s[8];
+    char pidZP_s[8];
+    char pidZI_s[8];
+    char pidZD_s[8];
+    char total[100];
+    dtostrf(pidXP, 7, 3, pidXP_s);
+    dtostrf(pidXI, 7, 3, pidXI_s);
+    dtostrf(pidXD, 7, 3, pidXD_s);
+    dtostrf(pidYP, 7, 3, pidYP_s);
+    dtostrf(pidYI, 7, 3, pidYI_s);
+    dtostrf(pidYD, 7, 3, pidYD_s);
+    dtostrf(pidZP, 7, 3, pidZP_s);
+    dtostrf(pidZI, 7, 3, pidZI_s);
+    dtostrf(pidZD, 7, 3, pidZD_s);
     sprintf(total, "pid:%s:%s:%s:%s:%s:%s:%s:%s:%s", pidXP_s, pidXI_s, pidXD_s, pidYP_s, pidYI_s, pidYD_s, pidZP_s, pidZI_s, pidZD_s);
     Serial1.println(total);
 }
