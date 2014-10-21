@@ -230,7 +230,8 @@ a {
     width: 900px;
 }
 
-#vspeed {
+#vspeed,
+#airspeed {
     transition-duration: 1s;
     transition-timing-function: linear;
 }

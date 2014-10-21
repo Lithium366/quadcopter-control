@@ -73,6 +73,15 @@ $(function () {
         $("#vspeed").css("transform", "rotate(" + (fps * 9 - 90) + "deg)");
     });
 
+    var prevSpeed = 0;
+    $(window).on("systemUpdated", function (e, values) {
+       values = values.values;
+       if(prevSpeed !== parseFloat(values[3]).toFixed(1)) {
+         prevSpeed = parseFloat(values[3]).toFixed(1);
+         $("#airspeed").css("transform", "rotate(" + (prevSpeed * 7.2) + "deg)");
+       }
+    });
+
     var updateRCcontrols = function (values) {
         var chart = $('#container-throttle').highcharts();
         if (chart && values[0]) {

@@ -24,9 +24,16 @@ float getCompassData()
   return headingDegrees;
 }
 
+void getLevel() {
+  pitchCorrection = (float) EEPROMReadlong(40) / 1000;
+  rollCorrection = (float) EEPROMReadlong(44) / 1000;
+}
+
 void setLevel() {
-  pitchCorrection = -angley;
-  rollCorrection = -anglex; 
+  pitchCorrection = -1 * (angley - pitchCorrection);
+  rollCorrection = -1 * (anglex - rollCorrection); 
+  EEPROMWritelong(40, long(pitchCorrection * 1000));
+  EEPROMWritelong(44, long(rollCorrection * 1000));
 }
 
 void getAngles()
@@ -50,12 +57,28 @@ void getAngles()
   }
   ptime = millis();
 
-  anglex = 0.98 * (anglex + gyro.g.x * 0.00875 * dtime / 1000 * -1) + 0.02 * roll;
-  angley = 0.98 * (angley + gyro.g.y * 0.00875 * dtime / 1000 * -1) + 0.02 * pitch;
+  anglex = 0.98 * (anglex + gyro.g.x * 0.00875 * dtime / 1000 * -1) + 0.02 * pitch;
+  angley = 0.98 * (angley + gyro.g.y * 0.00875 * dtime / 1000 * -1) + 0.02 * roll;
   if (!anglez) {
     anglez = yaw;
   }
   anglez = 0.999 * (anglez + gyro.g.z * 0.00875 * dtime / 1000 * -1) + 0.001 * yaw;
+}
+
+void computeErrorZ () {
+  if (!deltaZ) {
+    deltaZ = anglez;
+  }    
+  if(abs(YawVal) > 5) {
+    deltaZ = anglez + YawVal;
+  }
+  errorZ = anglez - deltaZ;
+  if(errorZ > 180) {
+    errorZ -= 360;
+  } else if (errorZ < -180) {
+    errorZ += 360;
+  }
+  // if wind will rotate to 180/-180 - Quad will crash  
 }
 
 

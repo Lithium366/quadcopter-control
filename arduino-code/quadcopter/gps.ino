@@ -4,3 +4,7 @@ void readGps () {
   while (Serial2.available())
       gps.encode(Serial2.read());
 }
+
+float getSpeed () {
+  return gps.f_speed_knots();
+}

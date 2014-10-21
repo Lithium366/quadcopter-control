@@ -31,6 +31,53 @@ void telemetry () {
   }
 }
 
+void setMode () {
+  unsigned long tmr = millis();
+  String mode;
+  if (Serial1.available() > 0) {
+    while (Serial1.available())    
+      mode += (char)Serial1.read();
+  }  
+  
+  long pres = 0;
+  String pidr = ""; 
+  
+  switch (mode.charAt(0)) {
+    case 'f':
+      telemetry_mode = 1;
+      break;
+    case 'p': // Send PID and errors
+      telemetry_mode = 2;
+      break;
+    case 'v': // Send raw accelerometer data
+      telemetry_mode = 3;
+      break; 
+    case 't':
+      telemetry_mode = 4;
+      break;
+    case 'l':
+      setLevel();
+      break;
+    case 's':
+      pidr = mode.substring(1, mode.length());
+      setPid(pidr);
+      break;
+    case 'a': // Arm/Disarm from a console
+      if (ThrottleVal <= (minThrottle + 100)) {
+        armed = !armed;
+      }
+      break;
+    case 'w':
+      pres = mode.substring(1, mode.length()).toInt();
+      if (pres > 80000) {
+        bmp.setSeaLevelPressure(pres);
+      }
+      break;
+    default:
+      break;
+  }
+}
+
 void printAccel() {
   vybroxsum = "";
   vybroysum = "";
@@ -146,6 +193,8 @@ void printSystem() {
   Serial1.print(":");
   Serial1.print(flon, 10);
   Serial1.print(":");  
+  Serial1.print(getSpeed(), 1);
+  Serial1.print(":");
   Serial1.println(armed ? 1 : 0);
   
   //Serial.println(millis() - tmr);
