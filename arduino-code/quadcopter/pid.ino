@@ -47,8 +47,8 @@ void setPid(String pidr) {
 
 void calculatePID () {
   if (armed) {
-    SetpointX = RollVal;
-    SetpointY = PitchVal;
+    SetpointX = -1 * PitchVal;
+    SetpointY = -1 * RollVal;
     computeErrorZ();
     myPIDx.Compute();
     myPIDy.Compute();

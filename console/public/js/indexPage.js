@@ -57,7 +57,7 @@ $(function () {
     var counter = 0;
     var feets = 0;
     $(window).on("anglesUpdated", function (e, values) {
-        $("#img1")[0].setAttribute("patternTransform", "rotate(" + values.values[0] + ", 100, 100) translate(0,"+ values.values[1] + ")");
+        $("#img1")[0].setAttribute("patternTransform", "rotate(" + values.values[1] + ", 100, 100) translate(0,"+ values.values[0] + ")");
         $("#compass_scale").css("transform", "rotate(" + (-1 * values.values[2]) + "deg)");
         feets += parseInt(parseFloat(values.values[3]) * 3.28084);
         counter++;

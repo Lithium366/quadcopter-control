@@ -58,8 +58,8 @@ float flat, flon;
   unsigned long age;
 
 double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ, deltaZ, errorZ; // PID setpoints and errors
-PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, REVERSE); //Roll PID
-PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, DIRECT); //Pitch PID
+PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, REVERSE); //Pitch PID
+PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, DIRECT); //Roll PID
 PID myPIDz(&errorZ, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT); //Yaw PID
 
 void setup() {
@@ -77,13 +77,13 @@ void setup() {
   SetpointY = 0;
   SetpointZ = 0; //Must be always 0
   myPIDx.SetMode(AUTOMATIC);
-  myPIDx.SetSampleTime(6);
+  myPIDx.SetSampleTime(4);
   myPIDx.SetOutputLimits(-200, 200);
   myPIDy.SetMode(AUTOMATIC);
-  myPIDy.SetSampleTime(6);
+  myPIDy.SetSampleTime(4);
   myPIDy.SetOutputLimits(-200, 200);
   myPIDz.SetMode(AUTOMATIC);
-  myPIDz.SetSampleTime(6);
+  myPIDz.SetSampleTime(4);
   myPIDz.SetOutputLimits(-200, 200);
   getPid();
   updatePid();
@@ -115,8 +115,8 @@ void loop() {
 void engineVelocities () {
   if (armed) {
     enginex1.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle - OutputY - OutputX - OutputZ);
-    enginex2.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle - OutputY + OutputX + OutputZ);
-    enginex3.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle + OutputY - OutputX + OutputZ);
+    enginex2.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle + OutputY - OutputX + OutputZ);
+    enginex3.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle - OutputY + OutputX + OutputZ);
     enginex4.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle + OutputY + OutputX - OutputZ);
   } else {
     enginex1.writeMicroseconds(0);
