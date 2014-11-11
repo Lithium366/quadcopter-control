@@ -66,6 +66,10 @@ sp.on('open', function () {
         choseMode("p");
         res.render('pid');
     });
+    app.get('/engines', function(req, res){
+        choseMode("e");
+        res.render('engines');
+    });
     app.get('/accelerometer', function(req, res){
         choseMode("v");
         res.render('vybro');

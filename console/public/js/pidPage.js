@@ -101,8 +101,8 @@ quadcopter.controller('pidController', function ($scope) {
         zoomEnabled: false,
         animationEnabled: false,
         axisY: {
-            minimum: -20,
-            maximum: 20
+            minimum: -40,
+            maximum: 40
         },
         data: [
             {
@@ -121,7 +121,7 @@ quadcopter.controller('pidController', function ($scope) {
         for (var i = 0; i < data.length; i++) {
             arr.push({
                 x: val,
-                y: parseInt(data[i]) / 100
+                y: parseInt(data[i]) ? parseInt(data[i]) / 100 : 0
             });
             if (arr.length > 1000) {
                 arr.shift();

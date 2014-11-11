@@ -5,6 +5,7 @@ double fYg = 0;
 double fZg = 0;
 int znak = 1;
 double yaw1 = 0;
+boolean holdZ = false;
 
 long ptime = 0;
 
@@ -86,14 +87,18 @@ void getAngles()
   anglez = k1 * (anglez + gyro.g.z * 0.00875 * dtime / 1000 * -1) + k2 * yaw;
 }
 
-void computeErrorZ () {
-  if (!deltaZ) {
-    deltaZ = anglez;
-  }    
-  if(abs(YawVal) > 5) {
-    deltaZ = anglez + YawVal;
+void computeErrorZ () 
+  if (abs(YawVal) <= 2) {
+    if (!holdZ) {
+      deltaZ = anglez;
+      holdZ = true;
+    }
+    errorZ = anglez - deltaZ;
+  } else {
+    errorZ = (double)YawVal;
+    holdZ = false;
   }
-  errorZ = anglez - deltaZ;
+  
   if(errorZ > 180) {
     errorZ -= 360;
   } else if (errorZ < -180) {

@@ -40,6 +40,9 @@ double vybroz[7];
 double errorx[7];
 double errory[7];
 double errorz[7];
+double enginex[7];
+double enginey[7];
+double enginez[7];
 String vybroxsum;
 String vybroysum;
 String vybrozsum;
@@ -60,7 +63,7 @@ float flat, flon;
 double SetpointX, OutputX, SetpointY, OutputY, SetpointZ, OutputZ, deltaZ, errorZ; // PID setpoints and errors
 PID myPIDx(&anglex, &OutputX, &SetpointX, pidXP, pidXI, pidXD, REVERSE); //Pitch PID
 PID myPIDy(&angley, &OutputY, &SetpointY, pidYP, pidYI, pidYD, DIRECT); //Roll PID
-PID myPIDz(&errorZ, &OutputZ, &SetpointZ, pidZP, pidZI, pidZD, DIRECT); //Yaw PID
+PID myPIDz(&SetpointZ, &OutputZ, &errorZ, pidZP, pidZI, pidZD, REVERSE); //Yaw PID
 
 void setup() {
   Serial1.begin(57600); //3DR telemetry (always 57600)
@@ -78,13 +81,13 @@ void setup() {
   SetpointZ = 0; //Must be always 0
   myPIDx.SetMode(AUTOMATIC);
   myPIDx.SetSampleTime(4);
-  myPIDx.SetOutputLimits(-200, 200);
+  myPIDx.SetOutputLimits(-400, 400);
   myPIDy.SetMode(AUTOMATIC);
   myPIDy.SetSampleTime(4);
-  myPIDy.SetOutputLimits(-200, 200);
+  myPIDy.SetOutputLimits(-400, 400);
   myPIDz.SetMode(AUTOMATIC);
   myPIDz.SetSampleTime(4);
-  myPIDz.SetOutputLimits(-200, 200);
+  myPIDz.SetOutputLimits(-400, 400);
   getPid();
   updatePid();
   getLevel();
@@ -114,10 +117,13 @@ void loop() {
 
 void engineVelocities () {
   if (armed) {
-    enginex1.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle - OutputY - OutputX - OutputZ);
-    enginex2.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle + OutputY - OutputX + OutputZ);
-    enginex3.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle - OutputY + OutputX + OutputZ);
-    enginex4.writeMicroseconds(minEngineRPM + ThrottleVal - minThrottle + OutputY + OutputX - OutputZ);
+    enginex[loopcount] = OutputX;
+    enginey[loopcount] = OutputY;
+    enginez[loopcount] = OutputZ;
+    enginex1.writeMicroseconds((int)(minEngineRPM + ThrottleVal - minThrottle - OutputY - OutputX - OutputZ));
+    enginex2.writeMicroseconds((int)(minEngineRPM + ThrottleVal - minThrottle + OutputY - OutputX + OutputZ));
+    enginex3.writeMicroseconds((int)(minEngineRPM + ThrottleVal - minThrottle - OutputY + OutputX + OutputZ));
+    enginex4.writeMicroseconds((int)(minEngineRPM + ThrottleVal - minThrottle + OutputY + OutputX - OutputZ));
   } else {
     enginex1.writeMicroseconds(0);
     enginex2.writeMicroseconds(0);

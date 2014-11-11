@@ -33,7 +33,7 @@ int maxThrottle = 2300;
 // Correction values to keep horison position
 double pitchCorrection, rollCorrection;
 double yawCorrection = 0;
-int minEngineRPM = 700;
+int minEngineRPM = 600;
 
 //Roll
 

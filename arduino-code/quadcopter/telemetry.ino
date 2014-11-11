@@ -9,9 +9,14 @@ void telemetry () {
       }
     } else if (telemetry_mode == 2) { // PID data (error)
       if (loopcount >= 7) {
-        printError();
-        loopcount = 0;
+        if (loopcount >= 7) {
+          printError();
+          loopcount = 0;
+        }
       }
+    } else if (telemetry_mode == 5) {
+      printEngines();
+      loopcount = 0;
     } else if (telemetry_mode == 4) { // Send PID values 
       if (loopcount >= 7) {
         printPID();
@@ -54,6 +59,9 @@ void setMode () {
       break; 
     case 't':
       telemetry_mode = 4;
+      break;
+    case 'e': // Print PID engine outputs
+      telemetry_mode = 5;
       break;
     case 'l':
       setLevel();
@@ -128,6 +136,31 @@ void printError () {
   Serial1.println("devider");
 }
 
+void printEngines () {
+  vybroxsum = "";
+  vybroysum = "";
+  vybrozsum = "";
+  for (int i = 0; i < loopcount; i++) {
+    char tmp[5];
+    dtostrf(enginex[i], 5, 0, tmp);
+    vybroxsum += ":";
+    vybroxsum += tmp;
+    dtostrf(enginey[i], 5, 0, tmp);
+    vybroysum += ":";
+    vybroysum += tmp;
+    dtostrf(enginez[i], 5, 0, tmp);
+    vybrozsum += ":";
+    vybrozsum += tmp;
+  }
+  Serial1.print("enginex");
+  Serial1.println(vybroxsum);
+  Serial1.print("enginey");
+  Serial1.println(vybroysum);
+  Serial1.print("enginez");
+  Serial1.println(vybrozsum);
+  Serial1.println("devider");
+}
+
 void printPID () {
     char pidXP_s[8];
     char pidXI_s[8];
@@ -174,18 +207,7 @@ void printRC() {
     Serial1.println(total);
 }
 
-void printSystem() {
-  //unsigned int tmr = millis();
-  
-  /*char total[50];
-  char flat_s[15];
-  char flon_s[15];
-  dtostrf(flat, 15, 10, flat_s);
-  dtostrf(flon, 15, 10, flon_s);
-  sprintf(total, "system:%d:%s:%s:%d", dtime, flat_s, flon_s, armed ? 1 : 0);
-  Serial1.println(total);*/
-  
-  
+void printSystem() {  
   Serial1.print("system:");
   Serial1.print(dtime);
   Serial1.print(":");
@@ -196,6 +218,4 @@ void printSystem() {
   Serial1.print(getSpeed(), 1);
   Serial1.print(":");
   Serial1.println(armed ? 1 : 0);
-  
-  //Serial.println(millis() - tmr);
 }
