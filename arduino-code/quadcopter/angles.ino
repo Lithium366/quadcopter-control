@@ -87,7 +87,7 @@ void getAngles()
   anglez = k1 * (anglez + gyro.g.z * 0.00875 * dtime / 1000 * -1) + k2 * yaw;
 }
 
-void computeErrorZ () 
+void computeErrorZ ()  {
   if (abs(YawVal) <= 2) {
     if (!holdZ) {
       deltaZ = anglez;

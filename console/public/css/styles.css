@@ -56,7 +56,6 @@ html {
 
 .row input {
 	width: 55px;
-	margin-right: 10px;
 }
 
 .row label {
@@ -207,6 +206,28 @@ a {
     text-align: center;
 }
 
+.graps .row a {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border-radius: 7px;
+    background-color: #d8d8d8;
+    margin-bottom: -2px;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+
+.graps .row a.selected {
+    background-color: green;
+}
+
+.graps .row.common a {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin: 10px 39px 0;
+}
+
 .graps select {
     width: 100px;
     height: 30px;
@@ -221,13 +242,13 @@ a {
 
 .graps .left {
     float: left;
-    width: 270px;
+    width: 300px;
     margin-left: 10px;
     margin-top: 40px;
 }
 .graps .right {
     float: left;
-    width: 900px;
+    width: 870px;
 }
 
 #vspeed,

@@ -4,6 +4,44 @@ void updatePid() {
   myPIDz.SetTunings(pidZP, pidZI, pidZD);
 }
 
+void realTimePid(char axe, char param) {
+  if (axe == 'p') {
+    if (param == 'x') {
+      pidXP = CH7Val / 1000;
+    } else if (param == 'y') {
+      pidYP = CH7Val / 1000;
+    } else if (param == 'z') {
+      pidZP = CH7Val / 1000;
+    } else if (param == 'a') {
+      pidXP = CH7Val / 1000;
+      pidYP = CH7Val / 1000;
+    }
+  } else if (axe == 'i') {
+    if (param == 'x') {
+      pidXI = CH7Val / 1000;
+    } else if (param == 'y') {
+      pidYI = CH7Val / 1000;
+    } else if (param == 'z') {
+      pidZI = CH7Val / 1000;
+    } else if (param == 'a') {
+      pidXI = CH7Val / 1000;
+      pidYI = CH7Val / 1000;
+    }
+  } else if (axe == 'd') {
+    if (param == 'x') {
+      pidXD = CH7Val / 10000 + 0.5;
+    } else if (param == 'y') {
+      pidYD = CH7Val / 10000 + 0.5;
+    } else if (param == 'z') {
+      pidZD = CH7Val / 10000 + 0.5;
+    } else if (param == 'a') {
+      pidXD = CH7Val / 10000 + 0.5;
+      pidYD = CH7Val / 10000 + 0.5;
+    }
+  }
+  updatePid();
+}
+
 void getPid () {
   int startingAddress = 1;
   pidXP = (float) EEPROMReadlong(startingAddress + 4*startingAddress*0) / 1000;

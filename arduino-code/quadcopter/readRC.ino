@@ -44,9 +44,9 @@ void readRC() {
   CH5Val = map(unCH5InShared, rcMin, rcMax, false, true);
   CH6Val = map(unCH6InShared, rcMin, rcMax, 0, 255);
   if (CH6Val < 0) {CH6Val = 0;}
-  CH7Val = map(unCH7InShared, rcMin, rcMax, 0, 255);
+  CH7Val = map(unCH7InShared, rcMin, rcMax, 500, 6000);
   if (CH7Val < 0) {CH7Val = 0;}
-  CH8Val = map(unCH8InShared, rcMin, rcMax, 0, 255);
+  CH8Val = map(unCH8InShared, rcMin, rcMax, 500, 6000);
   if (CH8Val < 0) {CH8Val = 0;}
 }
 

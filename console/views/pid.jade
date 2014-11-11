@@ -5,14 +5,21 @@ block content
 		.left
 			h3 PID settings
 			form
+				.row.common
+					a(ng-click='toggleMode("pa")', ng-class='{selected:modes["pa"]}')
+					a(ng-click='toggleMode("ia")', ng-class='{selected:modes["ia"]}')
+					a(ng-click='toggleMode("da")', ng-class='{selected:modes["da"]}')
 				.row(ng-repeat='(axe, pid) in pids')
 					h3 {{pid.name}} PID
 					label(for='pid{{axe}}p') P
 					input(name='pid{{axe}}p', id='pid{{axe}}p', ng-model='pid.p')
+					a(ng-click='toggleMode("p" + axe)', ng-class='{selected:modes["p" + axe]}')
 					label(for='pid{{axe}}i') I
 					input(name='pid{{axe}}i', id='pid{{axe}}i',  ng-model='pid.i')
+					a(ng-click='toggleMode("i" + axe)', ng-class='{selected:modes["i" + axe]}')
 					label(for='pid{{axe}}d') D
 					input(name='pidx{{axe}}d', id='pid{{axe}}d', ng-model='pid.d')
+					a(ng-click='toggleMode("d" + axe)', ng-class='{selected:modes["d" + axe]}')
 				.row
 					button.btn.btn-primary.btn-sm(ng-click='getPid()', id='getPid', ng-disabled='!savedPid') Get
 					button.btn.btn-primary.btn-sm(ng-click='setPid()', id='savePid', ng-disabled='!savedPid') Save

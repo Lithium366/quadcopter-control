@@ -1,3 +1,4 @@
+String pmode = "";
 void telemetry () {
   //Telemetry info
   if (debug_mode) {
@@ -7,7 +8,10 @@ void telemetry () {
         printAccel();
         loopcount = 0;
       }
-    } else if (telemetry_mode == 2) { // PID data (error)
+    } else if (telemetry_mode == 2 || telemetry_mode == 6) { // PID data (error)
+      if (telemetry_mode == 6) {
+        realTimePid(pmode.charAt(1), pmode.charAt(0));
+      }
       if (loopcount >= 7) {
         if (loopcount >= 7) {
           printError();
@@ -45,13 +49,13 @@ void setMode () {
   }  
   
   long pres = 0;
-  String pidr = ""; 
+  String pidr = "";
   
   switch (mode.charAt(0)) {
     case 'f':
       telemetry_mode = 1;
       break;
-    case 'p': // Send PID and errors
+    case 'b': // Send PID and errors
       telemetry_mode = 2;
       break;
     case 'v': // Send raw accelerometer data
@@ -66,6 +70,12 @@ void setMode () {
     case 'l':
       setLevel();
       break;
+    case 'p':
+    case 'i':
+    case 'd': 
+      pmode = mode; 
+      telemetry_mode = 6;
+      break;
     case 's':
       pidr = mode.substring(1, mode.length());
       setPid(pidr);
@@ -74,6 +84,12 @@ void setMode () {
       if (ThrottleVal <= (minThrottle + 100)) {
         armed = !armed;
       }
+      break;
+    case 'u':
+      myPIDx.SetTunings(pidXP + CH7Val/1000, pidXI, pidXD);
+      myPIDy.SetTunings(pidYP + CH7Val/1000, pidYI, pidYD);
+      myPIDz.SetTunings(pidZP + CH7Val/1000, pidZI, pidZD);
+      telemetry_mode = 2;
       break;
     case 'w':
       pres = mode.substring(1, mode.length()).toInt();

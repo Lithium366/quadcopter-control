@@ -80,13 +80,13 @@ void setup() {
   SetpointY = 0;
   SetpointZ = 0; //Must be always 0
   myPIDx.SetMode(AUTOMATIC);
-  myPIDx.SetSampleTime(4);
+  myPIDx.SetSampleTime(6);
   myPIDx.SetOutputLimits(-400, 400);
   myPIDy.SetMode(AUTOMATIC);
-  myPIDy.SetSampleTime(4);
+  myPIDy.SetSampleTime(6);
   myPIDy.SetOutputLimits(-400, 400);
   myPIDz.SetMode(AUTOMATIC);
-  myPIDz.SetSampleTime(4);
+  myPIDz.SetSampleTime(6);
   myPIDz.SetOutputLimits(-400, 400);
   getPid();
   updatePid();

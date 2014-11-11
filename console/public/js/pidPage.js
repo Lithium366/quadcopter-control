@@ -30,6 +30,36 @@ quadcopter.controller('pidController', function ($scope) {
         }
     };
 
+    $scope.modes = {
+        'px': false,
+        'py': false,
+        'pz': false,
+        'pa': false,
+        'ix': false,
+        'iy': false,
+        'iz': false,
+        'ia': false,
+        'dx': false,
+        'dy': false,
+        'dz': false,
+        'da': false
+    };
+
+    $scope.toggleMode = function (mode) {
+        angular.forEach($scope.modes, function(value, key) {
+            if (key === mode) {
+                $scope.modes[key] = !$scope.modes[key];
+                if ($scope.modes[key]) {
+                    socket.emit("setPidMode", key);
+                } else {
+                    socket.emit("setPidMode");
+                }
+            } else {
+                $scope.modes[key] = false;
+            }
+        });
+    };
+
     $scope.$watch('currentAxe', function() {
         prop = $scope.currentAxe.name;
     });
