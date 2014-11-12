@@ -45,14 +45,18 @@ quadcopter.controller('pidController', function ($scope) {
         'da': false
     };
 
+    $scope.activeMode = false;
+
     $scope.toggleMode = function (mode) {
         angular.forEach($scope.modes, function(value, key) {
             if (key === mode) {
                 $scope.modes[key] = !$scope.modes[key];
                 if ($scope.modes[key]) {
                     socket.emit("setPidMode", key);
+                    $scope.activeMode = key;
                 } else {
                     socket.emit("setPidMode");
+                    $scope.activeMode = false;
                 }
             } else {
                 $scope.modes[key] = false;
@@ -69,7 +73,7 @@ quadcopter.controller('pidController', function ($scope) {
     };
 
     $scope.getPid = function () {
-        socket.emit("getPid");
+        socket.emit("getPid", $scope.activeMode);
     };
 
     $scope.setPid = function () {

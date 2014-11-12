@@ -20,12 +20,12 @@ server.listen(3000, function() {
 /*** SERIAL PORT ***/
 var port = "/dev/tty.SLAB_USBtoUART";
 
-/*var sp = new SerialPort(port, {
+var sp = new SerialPort(port, {
     baudrate: 57600,
     parser: serialport.parsers.readline("\r\n")
-});*/
+});
 
-//sp.on('open', function () {
+sp.on('open', function () {
     var tmot = null;
     var jsobj = {};
     var nowDate = new Date();
@@ -39,7 +39,7 @@ var port = "/dev/tty.SLAB_USBtoUART";
         '-' + ((nowDate.getSeconds() >= 10) ? '' : '0') + nowDate.getSeconds() +
         '.txt', {'flags': 'a'});*/
 
-    /*sp.on('data', function (data) {
+    sp.on('data', function (data) {
         //logger.write(data + "\r\n");
 
         if (data === 'pidsaved') {
@@ -52,7 +52,7 @@ var port = "/dev/tty.SLAB_USBtoUART";
         } else {
             jsobj[dataParsed[0]] = dataParsed.splice(1, dataParsed.length);
         }
-    });*/
+    });
 
     app.get('/', function(req, res){
         choseMode("f");
@@ -63,7 +63,7 @@ var port = "/dev/tty.SLAB_USBtoUART";
         res.render('logs');
     });
     app.get('/pid', function(req, res){
-        //choseMode("b");
+        choseMode("b");
         res.render('pid');
     });
     app.get('/engines', function(req, res){
@@ -117,10 +117,14 @@ var port = "/dev/tty.SLAB_USBtoUART";
             }
         });
 
-        socket.on('getPid', function () {
+        socket.on('getPid', function (val) {
             choseMode("t");
             setTimeout(function () {
-                choseMode("p");
+                if (!val) {
+                    choseMode("b");
+                } else {
+                    choseMode(val);
+                }
             }, 1500);
         });
 
@@ -137,7 +141,7 @@ var port = "/dev/tty.SLAB_USBtoUART";
 
     });
 
-//});
+});
 
 
 

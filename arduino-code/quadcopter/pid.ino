@@ -4,39 +4,39 @@ void updatePid() {
   myPIDz.SetTunings(pidZP, pidZI, pidZD);
 }
 
-void realTimePid(char axe, char param) {
+void realTimePid(char param, char axe) {
   if (axe == 'p') {
     if (param == 'x') {
-      pidXP = CH7Val / 1000;
+      pidXP = (float)CH7Val / 1000;
     } else if (param == 'y') {
-      pidYP = CH7Val / 1000;
+      pidYP = (float)CH7Val / 1000;
     } else if (param == 'z') {
-      pidZP = CH7Val / 1000;
+      pidZP = (float)CH7Val / 1000;
     } else if (param == 'a') {
-      pidXP = CH7Val / 1000;
-      pidYP = CH7Val / 1000;
+      pidXP = (float)CH7Val / 1000;
+      pidYP = (float)CH7Val / 1000;
     }
   } else if (axe == 'i') {
     if (param == 'x') {
-      pidXI = CH7Val / 1000;
+      pidXI = (float)CH7Val / 1000;
     } else if (param == 'y') {
-      pidYI = CH7Val / 1000;
+      pidYI = (float)CH7Val / 1000;
     } else if (param == 'z') {
-      pidZI = CH7Val / 1000;
+      pidZI = (float)CH7Val / 1000;
     } else if (param == 'a') {
-      pidXI = CH7Val / 1000;
-      pidYI = CH7Val / 1000;
+      pidXI = (float)CH7Val / 1000;
+      pidYI = (float)CH7Val / 1000;
     }
   } else if (axe == 'd') {
     if (param == 'x') {
-      pidXD = CH7Val / 10000 + 0.5;
+      pidXD = (float)CH7Val / 10000 + 0.5;
     } else if (param == 'y') {
-      pidYD = CH7Val / 10000 + 0.5;
+      pidYD = (float)CH7Val / 10000 + 0.5;
     } else if (param == 'z') {
-      pidZD = CH7Val / 10000 + 0.5;
+      pidZD = (float)CH7Val / 10000 + 0.5;
     } else if (param == 'a') {
-      pidXD = CH7Val / 10000 + 0.5;
-      pidYD = CH7Val / 10000 + 0.5;
+      pidXD = (float)CH7Val / 10000 + 0.5;
+      pidYD = (float)CH7Val / 10000 + 0.5;
     }
   }
   updatePid();
