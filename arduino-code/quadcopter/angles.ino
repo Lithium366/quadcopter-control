@@ -29,6 +29,16 @@ float getCompassData(double pitch, double roll)
     heading -= 2*PI;
     
   float headingDegrees = heading * 180/M_PI;
+  Serial.print(scaled.XAxis, 1);
+  Serial.print(":");
+  Serial.print(scaled.YAxis, 1);
+  Serial.print(":");
+  Serial.print(xh, 1);
+  Serial.print(":");
+  Serial.print(yh, 1);
+  Serial.print(":");
+  Serial.print(headingDegrees, 1);
+  Serial.println();
   return headingDegrees;
 }
 
