@@ -6,6 +6,7 @@
 #include <ADXL345.h>
 #include <L3G4200D.h>
 #include <HMC5883L.h>
+#include "I2Cdev.h"
 #include <PID_v1.h>
 #include <TinyGPS.h>
 #include <BMP085NB.h>
@@ -17,9 +18,11 @@ boolean CH5Val;
 
 ADXL345 acc; //Accelerometer data
 L3G4200D gyro; //Gyro data
-HMC5883L compass; //Compass data
+HMC5883L mag; //Compass data
 TinyGPS gps; //GPS data
 BMP085NB bmp; // pressure sensor
+      
+int16_t mx, my, mz;
       
 // Temperature / pressure related vars      
 int Temperature = 0;
@@ -50,6 +53,7 @@ int dtime = 0; //Loop time
 int loopcount = 0; //Telemetry loop counter
 int armcounter = 0;
 bool armed = false;
+bool ftime = true;
 
 Servo enginex1; //Top left engine
 Servo enginex2; //Top right engine
@@ -72,9 +76,7 @@ void setup() {
   acc.begin();
   acc.setRange(ADXL345::RANGE_2G);
   gyro.enableDefault();
-  compass = HMC5883L();
-  compass.SetScale(1.3);
-  compass.SetMeasurementMode(Measurement_Continuous);
+  mag.initialize();
   bmp.initialize();
   SetpointX = 0;
   SetpointY = 0;
@@ -117,6 +119,7 @@ void loop() {
 
 void engineVelocities () {
   if (armed) {
+    ftime = true;
     enginex[loopcount] = OutputX;
     enginey[loopcount] = OutputY;
     enginez[loopcount] = OutputZ;
@@ -124,7 +127,8 @@ void engineVelocities () {
     enginex2.writeMicroseconds((int)(minEngineRPM + ThrottleVal - minThrottle + OutputY - OutputX + OutputZ));
     enginex3.writeMicroseconds((int)(minEngineRPM + ThrottleVal - minThrottle - OutputY + OutputX + OutputZ));
     enginex4.writeMicroseconds((int)(minEngineRPM + ThrottleVal - minThrottle + OutputY + OutputX - OutputZ));
-  } else {
+  } else if (ftime) {
+    ftime = false;
     enginex1.writeMicroseconds(0);
     enginex2.writeMicroseconds(0);
     enginex3.writeMicroseconds(0);
